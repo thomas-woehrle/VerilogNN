@@ -2,13 +2,13 @@
 // slightly modified for use with GTKWave
 
 `timescale 1ns / 1ps
-`include "../src/FloatingMultiplication.v"
+`include "src/FloatingMultiplication.v"
 
 module FloatMultiplicationTb;
-    reg [XLEN-1:0] A,B;
+    reg [31:0] A,B;
     reg clk;
     reg overflow, underflow, exception;
-    wire [XLEN-1:0] result;
+    wire [31:0] result;
     real  value;  // real (64bit FP) not synthesizable, only for sim comparison
 
     FloatingMultiplication F_Mult (.clk(clk),.A(A),.B(B),.result(result));
