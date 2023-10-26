@@ -4,7 +4,7 @@
 `timescale 1ns / 1ps
 `include "../src/FloatingMultiplication.v"
 
-module FloatMultiplicationTb #(parameter XLEN = 32);
+module FloatMultiplicationTb;
     reg [XLEN-1:0] A,B;
     reg clk;
     reg overflow, underflow, exception;
