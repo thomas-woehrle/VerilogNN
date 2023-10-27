@@ -12,8 +12,8 @@ module VectorMultiplication #(parameter VLEN = 1)
     genvar i;
     generate
         for(i = 0; i < VLEN; i = i + 1) begin
-            wire [31:0] A_item = A[32 * i +: 31];
-            wire [31:0] B_item = B[32 * i +: 31];
+            wire [31:0] A_item = A[32 * i +: 32];
+            wire [31:0] B_item = B[32 * i +: 32];
             wire [31:0] temp;
             FloatingMultiplication mult1(.A(A_item), .B(B_item), .clk(clk), .result(temp));  // element-wise multiplication
 
