@@ -4,7 +4,7 @@
 `timescale 1ns / 1ps
 `include "src/FloatingMultiplication.v"
 
-module FloatMultiplicationTb;
+module FloatMultiplicationTB;
     reg [31:0] A,B;
     reg clk;
     reg overflow, underflow, exception;
@@ -45,7 +45,7 @@ module FloatMultiplicationTb;
         result[31], result[22:0], result[30:23]);
 
         // dump to vcd file for GTKWave
-        $dumpfile("FloatMultiplicationTb.vcd");
+        $dumpfile("FloatMultiplicationTB.vcd");
         $dumpvars;
 
         #15

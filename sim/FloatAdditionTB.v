@@ -31,7 +31,7 @@ module FloatAdditionTB #(parameter XLEN = 32);
 
     initial
     begin
-        $dumpfile("test.vcd");
+        $dumpfile("FloatAdditionTB.vcd");
         $dumpvars;
 
         $monitor("A =     %b 1.%b * 2 ^ (%0d - 127)\nB =     %b 1.%b * 2 ^ (%0d - 127)\nA + B = %b 1.%b * 2 ^ (%0d - 127)",
