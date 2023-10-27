@@ -41,7 +41,7 @@ module FloatMultiplicationTB #(parameter VLEN = 5);
     initial
     begin
         // dump to vcd file for GTKWave
-        $dumpfile("FloatMultiplicationTb.vcd");
+        $dumpfile("vcd/VectorMultiplicationTB.vcd");
         $dumpvars;
 
         #100

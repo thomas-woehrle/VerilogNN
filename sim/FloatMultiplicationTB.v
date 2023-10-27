@@ -45,7 +45,7 @@ module FloatMultiplicationTB;
         result[31], result[22:0], result[30:23]);
 
         // dump to vcd file for GTKWave
-        $dumpfile("FloatMultiplicationTB.vcd");
+        $dumpfile("vcd/FloatMultiplicationTB.vcd");
         $dumpvars;
 
         #15
