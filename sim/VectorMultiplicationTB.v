@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 `include "src/VectorMultiplication.v"
+`include "src/DisplayFloat.v"
 
 module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     // this syntax would not pass to the module, easier to do it as one big vector
@@ -19,6 +20,8 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     // end
 
     VectorMultiplication #(.VLEN(VLEN)) mult (.A(A), .B(B), .clk(clk), .result(result));
+
+    DisplayFloat display_result (.num(result), .id("Res"), .format(1'b1));
 
     // numbers assignments
     initial
@@ -48,12 +51,8 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
         $dumpvars;
 
         #100
-        value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",
-                    (3.2 * 4.2) + (0.66 * 0.51) + ((-0.5) * (-6.4)) + ((-0.5) * (6.4)) + (2.82*(-0.94)),
-                    value);
+        $display("Expected Value: %f", (3.2 * 4.2) + (0.66 * 0.51) + ((-0.5) * (-6.4)) + ((-0.5) * (6.4)) + (2.82*(-0.94)));
 
-        $display("res = %b 1.%b * 2 ^ (%0d - 127)", result[31], result[22:0], result[30:23]);
         $finish;
     end
 
