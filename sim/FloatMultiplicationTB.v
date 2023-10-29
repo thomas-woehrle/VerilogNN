@@ -6,12 +6,10 @@
 
 module FloatMultiplicationTB;
     reg [31:0] A,B;
-    reg clk;
-    reg overflow, underflow, exception;
     wire [31:0] result;
     real  value;  // real (64bit FP) not synthesizable, only for sim comparison
 
-    FloatingMultiplication F_Mult (.clk(clk),.A(A),.B(B),.result(result));
+    FloatingMultiplication F_Mult (.A(A),.B(B),.result(result));
 
     // numbers assignments
     initial

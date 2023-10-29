@@ -5,7 +5,6 @@
 module VectorMultiplication #(parameter VLEN = 1)
                              (input [(32 * VLEN) - 1:0] A,
                               input [(32 * VLEN) - 1:0] B,
-                              input clk,
                               output [31:0] result);
     wire [31:0] partial_sums [0:VLEN-1];
 

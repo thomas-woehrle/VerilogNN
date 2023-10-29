@@ -6,8 +6,6 @@
 
 module FloatAdditionTB;
     reg [31:0] A,B;
-    reg clk;
-    reg overflow, underflow, exception;
     wire [31:0] result;
     real  value;
 

@@ -4,7 +4,6 @@
 
 module FloatDivisionTB;
     reg [31:0] A, B;
-    reg overflow,  underflow,  exception;
     wire [31:0] result;
     real  value;
 

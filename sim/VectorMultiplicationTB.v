@@ -7,8 +7,6 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     // reg [31:0] A, B [0:VLEN-1];
 
     reg [(32 * VLEN) - 1:0] A, B;
-    reg clk;
-    reg overflow, underflow, exception;
     wire [31:0] result;
     real value;  // real (64bit FP) not synthesizable, only for sim comparison
 
@@ -19,7 +17,7 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     //     assign B_packed[32 * i +: 31] = B[i];
     // end
 
-    VectorMultiplication #(.VLEN(VLEN)) mult (.A(A), .B(B), .clk(clk), .result(result));
+    VectorMultiplication #(.VLEN(VLEN)) mult (.A(A), .B(B), .result(result));
 
     DisplayFloat display_result (.num(result), .id("Res"), .format(1'b1));
 

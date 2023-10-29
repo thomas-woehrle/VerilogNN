@@ -3,10 +3,6 @@
 `timescale 1ns / 1ps
 module FloatingMultiplication   (input [31:0]A,
                                  input [31:0]B,
-                                 input clk,
-                                 output overflow,
-                                 output underflow,
-                                 output exception,
                                  output reg  [31:0] result);
 
     reg [23:0] A_Mantissa,B_Mantissa;
