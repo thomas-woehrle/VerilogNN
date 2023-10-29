@@ -8,7 +8,12 @@ all: $(VVP_FILES)
 clean:
 	rm run/* vcd/*
 
-run/%.vvp: sim/%.v
-	iverilog -o $@ $^
+run/%.vvp: sim/%.v run vcd
+	iverilog -o $@ $<
 	vvp $@ >/dev/null
-	mv *.vcd vcd
+
+run:
+	mkdir run
+
+vcd:
+	mkdir vcd
