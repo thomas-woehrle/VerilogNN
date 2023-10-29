@@ -4,12 +4,11 @@
 
 module FloatDivisionTB;
     reg [31:0] A, B;
-    reg clk;
     reg overflow,  underflow,  exception;
     wire [31:0] result;
     real  value;
-    FloatingDivision F_Div (.clk(clk), .A(A), .B(B), .result(result));
 
+    FloatingDivision F_Div (.A(A), .B(B), .result(result));
     DisplayFloat display_result1 (.num(result), .id("Res"), .format(1'b0));
 
     initial

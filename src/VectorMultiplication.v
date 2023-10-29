@@ -15,12 +15,12 @@ module VectorMultiplication #(parameter VLEN = 1)
             wire [31:0] A_item = A[32 * i +: 32];
             wire [31:0] B_item = B[32 * i +: 32];
             wire [31:0] temp;
-            FloatingMultiplication mult1(.A(A_item), .B(B_item), .clk(clk), .result(temp));  // element-wise multiplication
+            FloatingMultiplication mult1(.A(A_item), .B(B_item), .result(temp));  // element-wise multiplication
 
             if (i == 0)
                 assign partial_sums[i] = temp;
             else
-                FloatingAddition add1(.A(temp), .B(partial_sums[i-1]), .clk(clk), .result(partial_sums[i]));
+                FloatingAddition add1(.A(temp), .B(partial_sums[i-1]), .result(partial_sums[i]));
         end
     endgenerate
 
