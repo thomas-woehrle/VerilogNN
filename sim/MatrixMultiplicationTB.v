@@ -37,7 +37,7 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
     initial
     begin
         // dump to vcd file for GTKWave
-        $dumpfile("vcd/VectorMultiplicationTB.vcd");
+        $dumpfile("vcd/MatrixMultiplicationTB.vcd");
         $dumpvars;
 
         #100

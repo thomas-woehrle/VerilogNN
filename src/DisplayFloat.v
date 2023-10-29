@@ -9,17 +9,12 @@ module DisplayFloat (input [31:0] num,
     real value;
 
     always @ (num, format) begin
-        //      mantissa converted to real (and shifted)        number sign
-        value = ($itor({1'b1, num[22:0]}) / 2 ** 23) * ((-1) ** (num[31]));
-        if (num[30:23] >= 127)  // (biased) exponent >= 0
-            //              this part is effectively int, so it should not be in <0, 1> range
-            value = value * (2 ** (num[30:23] - 127));
-        else
-            value = value / (2 ** (127 - num[30:23]));
+        //      mantissa converted to real (and shifted)        number sign   2 ^ exponent (convert to real for bigger number range)
+        value = ($itor({1'b1, num[22:0]}) / 2 ** 23) * ((-1) ** (num[31])) * ($itor(2) ** $itor(num[30:23] - 127));
 
         if (format)  // == 1'b1
             $display("[DisplayFloat] %s: %f", id, value);
         else
-            $display("[DisplayFloat] %s: %b 1.%b * 2 ^ (%0d - 127) = %f", id, num[31], num[22:0], num[30:23], value);
+            $display("[DisplayFloat] %s: %b 1.%b * 2 ^ (%3d - 127) = %f", id, num[31], num[22:0], num[30:23], value);
     end
 endmodule
