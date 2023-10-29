@@ -2,14 +2,19 @@
 
 `timescale 1ns / 1ps
 `include "src/FloatingAddition.v"
+`include "src/DisplayFloat.v"
 
-module FloatAdditionTB #(parameter XLEN = 32);
-    reg [XLEN-1:0] A,B;
+module FloatAdditionTB;
+    reg [31:0] A,B;
     reg clk;
     reg overflow, underflow, exception;
-    wire [XLEN-1:0] result;
+    wire [31:0] result;
     real  value;
-    FloatingAddition F_Add (.clk(clk),.A(A),.B(B),.result(result));
+
+    FloatingAddition F_Add (.A(A),.B(B),.result(result));
+    DisplayFloat display_A (.num(A), .id("A  "), .format(1'b1));
+    DisplayFloat display_B (.num(B), .id("B  "), .format(1'b1));
+    DisplayFloat display_result1 (.num(result), .id("Res"), .format(1'b0));
 
     initial
     begin
@@ -27,6 +32,9 @@ module FloatAdditionTB #(parameter XLEN = 32);
         #20
         A = 32'h4034b4b5;
         B = 32'hbf70f0f1;
+        #20
+        A = 32'b1_10000000_00000000000000000000000;  // -2.0
+        B = 32'b0_10000000_10000000000000000000000;  //  3.0
     end
 
     initial
@@ -34,26 +42,29 @@ module FloatAdditionTB #(parameter XLEN = 32);
         $dumpfile("vcd/FloatAdditionTB.vcd");
         $dumpvars;
 
-        $monitor("A =     %b 1.%b * 2 ^ (%0d - 127)\nB =     %b 1.%b * 2 ^ (%0d - 127)\nA + B = %b 1.%b * 2 ^ (%0d - 127)",
-        A[31], A[22:0], A[30:23],
-        B[31], B[22:0], B[30:23],
-        result[31], result[22:0], result[30:23]);
+        // $monitor("A =     %b 1.%b * 2 ^ (%0d - 127)\nB =     %b 1.%b * 2 ^ (%0d - 127)\nA  +  B = %b 1.%b * 2 ^ (%0d - 127)",
+        // A[31], A[22:0], A[30:23],
+        // B[31], B[22:0], B[30:23],
+        // result[31], result[22:0], result[30:23]);
 
         #15
-        value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",3.2+4.2,value);
+
+        $display("Expected Value : %f",3.2 + 4.2);
         #20
-        value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",0.66+0.51,value);
+
+        $display("Expected Value : %f",0.66 + 0.51);
         #20
-        value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",-0.5-6.4,value);
+
+        $display("Expected Value : %f",-0.5 - 6.4);
         #20
-        value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",-0.5+6.4,value);
+
+        $display("Expected Value : %f",-0.5 + 6.4);
         #20
-        value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",2.82-0.94,value);
+
+        $display("Expected Value : %f",2.82 - 0.94);
+        #20
+
+        $display("Expected Value : %f",-2.0 + 3.0);
         $finish;
     end
 endmodule
