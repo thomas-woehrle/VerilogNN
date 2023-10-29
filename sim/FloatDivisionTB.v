@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 `include "src/FloatingDivision.v"
+`include "src/DisplayFloat.v"
 
 module FloatDivisionTB;
     reg [31:0] A, B;
@@ -8,6 +9,8 @@ module FloatDivisionTB;
     wire [31:0] result;
     real  value;
     FloatingDivision F_Div (.clk(clk), .A(A), .B(B), .result(result));
+
+    DisplayFloat display_result1 (.num(result), .id("Res"), .format(1'b0));
 
     initial
     begin
@@ -30,20 +33,20 @@ module FloatDivisionTB;
     initial
     begin
     #15
-    value =(2**(result[30:23]-127))*($itor({1'b1, result[22:0]})/2**23)*((-1)**(result[31]));
-    $display("Expected Value : %f Result : %f", 4.2/3.2, value);
+
+    $display("Expected Value : %f", 4.2/3.2);
     #20
-    value =(2**(result[30:23]-127))*($itor({1'b1, result[22:0]})/2**23)*((-1)**(result[31]));
-    $display("Expected Value : %f Result : %f", 0.66/0.51, value);
+
+    $display("Expected Value : %f", 0.66/0.51);
     #20
-    value =(2**(result[30:23]-127))*($itor({1'b1, result[22:0]})/2**23)*((-1)**(result[31]));
-    $display("Expected Value : %f Result : %f", (-6.4)/(-0.5), value);
+
+    $display("Expected Value : %f", (-6.4)/(-0.5));
     #20
-    value =(2**(result[30:23]-127))*($itor({1'b1, result[22:0]})/2**23)*((-1)**(result[31]));
-    $display("Expected Value : %f Result : %f", 6.4/(-0.5), value);
+
+    $display("Expected Value : %f", 6.4/(-0.5));
     #20
-    value =(2**(result[30:23]-127))*($itor({1'b1, result[22:0]})/2**23)*((-1)**(result[31]));
-    $display("Expected Value : %f Result : %f", 1.88/2.82, value);
+
+    $display("Expected Value : %f", 1.88/2.82);
     $finish;
     end
 endmodule
