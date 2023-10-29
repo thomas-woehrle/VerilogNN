@@ -25,6 +25,8 @@ module FloatDivisionTB;
         #20
         A = 32'h3ff0f0f1; // 1.88
         B = 32'h4034b4b5; // 2.82
+        #20
+        A = 32'h0000_0000; // 0.0
     end
 
     initial begin
@@ -46,6 +48,9 @@ module FloatDivisionTB;
         #20
 
         $display("Expected Value : %f", 1.88/2.82);
+        #20
+
+        $display("Expected Value : %f", 0.0/2.82);
         $finish;
     end
 endmodule

@@ -21,12 +21,16 @@
 // Uses Newton Raphson Iterations to find the reciprocal of the Divisor and then Multiplies the Reciprocal with the Dividend.
 module FloatingDivision(input [31:0]A,
                         input [31:0]B,
+                        output zero_division,
                         output [31:0] result);
 
     wire [7:0] Exponent;
-    wire [31:0] temp1, temp2, temp3, temp4, temp5, temp6, temp7, debug;
+    wire [31:0] temp1, temp2, temp3, temp4, temp5, temp6, temp7, result_unprotected;
     wire [31:0] reciprocal;
     wire [31:0] x0, x1, x2, x3;
+
+    // zero division flag
+    assign zero_division = (B[30:23] == 0) ? 1'b1 : 1'b0;
 
     // ----Initial value----       B_Mantissa * (2 ^ -1)            32 / 17
     FloatingMultiplication M1(.A({{1'b0, 8'd126, B[22:0]}}), .B(32'h3ff0_f0f1), .result(temp1));
@@ -53,5 +57,7 @@ module FloatingDivision(input [31:0]A,
     assign reciprocal = {B[31], Exponent, x3[22:0]};
 
     /*----Multiplication A*1/B----*/
-    FloatingMultiplication M8(.A(A), .B(reciprocal), .result(result));
+    FloatingMultiplication M8(.A(A), .B(reciprocal), .result(result_unprotected));
+
+    assign result = ((A[30:23] == 0) || zero_division) ? 32'h0000_0000 : result_unprotected;
 endmodule
