@@ -1,4 +1,8 @@
 `timescale 1ns / 1ps
+
+`ifndef _relu
+`define _relu
+
 module ReLU (input      [31:0] num,
              output reg [31:0] result);
 
@@ -9,3 +13,4 @@ module ReLU (input      [31:0] num,
             result = num;
     end
 endmodule
+`endif // _relu

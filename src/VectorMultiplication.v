@@ -1,4 +1,8 @@
 `timescale 1ns / 1ps
+
+`ifndef _vector_multiplication
+`define _vector_multiplication
+
 `include "src/FloatingMultiplication.v"
 `include "src/FloatingAddition.v"
 
@@ -25,3 +29,4 @@ module VectorMultiplication #(parameter VLEN = 1)
 
     assign result = partial_sums[VLEN-1];
 endmodule;
+`endif // _vector_multiplication

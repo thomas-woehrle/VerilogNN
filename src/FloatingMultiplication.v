@@ -1,6 +1,10 @@
 // https://github.com/akilm/FPU-IEEE-754
 
 `timescale 1ns / 1ps
+
+`ifndef _floating_multiplication
+`define _floating_multiplication
+
 module FloatingMultiplication   (input [31:0]A,
                                  input [31:0]B,
                                  output reg  [31:0] result);
@@ -30,3 +34,4 @@ module FloatingMultiplication   (input [31:0]A,
         result = {Sign,Exponent,Mantissa};
     end
 endmodule
+`endif // _floating_multiplication

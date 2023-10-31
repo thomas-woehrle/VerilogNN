@@ -1,6 +1,10 @@
 // https://github.com/akilm/FPU-IEEE-754
 
 `timescale 1ns / 1ps
+
+`ifndef _floating_addition
+`define _floating_addition
+
 `include "src/FloatingCompare.v"
 
 module FloatingAddition (input [31:0]A,
@@ -51,3 +55,4 @@ module FloatingAddition (input [31:0]A,
         result = {A_sign, result_Exponent, result_Mantissa[22:0]};
     end
 endmodule
+`endif // _floating_addition

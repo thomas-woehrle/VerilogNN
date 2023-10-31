@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
 
+`ifndef _display_float
+`define _display_float
+
 // not synthesizable, only for testbench purposes
 // converts custom float into `real` type and displays it whenever the number changes
 module DisplayFloat (input [31:0] num,
@@ -18,3 +21,4 @@ module DisplayFloat (input [31:0] num,
             $display("[DisplayFloat] %s: %b 1.%b * 2 ^ (%3d - 127) = %f", id, num[31], num[22:0], num[30:23], value);
     end
 endmodule
+`endif

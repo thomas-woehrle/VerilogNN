@@ -1,4 +1,8 @@
 `timescale 1ns / 1ps
+
+`ifndef _matrix_multiplication
+`define _matrix_multiplication
+
 `include "src/VectorMultiplication.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
@@ -28,3 +32,4 @@ module MatrixMultiplication #(parameter L = 1, M = 1, N = 1)
                                                     );
     endgenerate
 endmodule;
+`endif // _matrix_multiplication

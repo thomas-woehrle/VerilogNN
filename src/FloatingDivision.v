@@ -15,6 +15,10 @@
 
 
 `timescale 1ns / 1ps
+
+`ifndef _floating_division
+`define _floating_division
+
 `include "src/FloatingMultiplication.v"
 `include "src/FloatingAddition.v"
 
@@ -61,3 +65,4 @@ module FloatingDivision(input [31:0]A,
 
     assign result = ((A[30:23] == 0) || zero_division) ? 32'h0000_0000 : result_unprotected;
 endmodule
+`endif // _floating_division

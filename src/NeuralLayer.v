@@ -1,4 +1,8 @@
 `timescale 1ns / 1ps
+
+`ifndef _neural_layer
+`define _neural_layer
+
 `include "src/MatrixMultiplication.v"
 `include "src/ReLU.v"
 `include "src/Sigmoid.v"
@@ -26,3 +30,4 @@ module NeuralLayer #(parameter IN_SIZE = 1, OUT_SIZE = 1)
     // determine output
     assign out = (activation == 1'b0) ? out_relu : out_sigmoid;
 endmodule;
+`endif // _neural_layer

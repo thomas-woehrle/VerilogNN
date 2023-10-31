@@ -1,4 +1,8 @@
 `timescale 1ns / 1ps
+
+`ifndef _sigmoid
+`define _sigmoid
+
 `include "src/FloatingDivision.v"
 
 // implementing so-called fast sigmoid, approximating with x / (1 + abs(x))
@@ -21,3 +25,4 @@ module Sigmoid (input  [31:0] num,
     // protecting zero division
     assign result = (denominator[30:23] == 0) ? one_half : result_unprotected;
 endmodule
+`endif // _sigmoid
