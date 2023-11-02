@@ -1,20 +1,22 @@
 `timescale 1ns / 1ps
-`include "src/MatrixMultiplication.v"
+`include "src/MatrixMultiplicationPar.v"
+`include "src/MatrixMultiplicationSeq.v"
 `include "src/DisplayFloat.v"
 
 module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float matrices
 
     reg  [(32 * L * M) - 1:0] A;
     reg  [(32 * M * N) - 1:0] B;
-    wire [(32 * L * N) - 1:0] result;
+    wire [(32 * L * N) - 1:0] result_par, result_seq;
     real value[1:0][1:0];
 
-    MatrixMultiplication #(.L(L), .M(M), .N(N)) mult (.A(A), .B(B), .result(result));
+    MatrixMultiplicationPar #(.L(L), .M(M), .N(N)) mult_par (.A(A), .B(B), .result(result_par));
+    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N)) mult_seq (.A(A), .B(B), .result(result_seq));
 
-    DisplayFloat display_result1 (.num(result[0  +: 32]), .id("0_0"), .format(1'b1));
-    DisplayFloat display_result2 (.num(result[32 +: 32]), .id("0_1"), .format(1'b1));
-    DisplayFloat display_result3 (.num(result[64 +: 32]), .id("1_0"), .format(1'b1));
-    DisplayFloat display_result4 (.num(result[96 +: 32]), .id("1_1"), .format(1'b1));
+    DisplayFloat display_result1 (.num(result_par[0  +: 32]), .id("0_0"), .format(1'b1));
+    DisplayFloat display_result2 (.num(result_par[32 +: 32]), .id("0_1"), .format(1'b1));
+    DisplayFloat display_result3 (.num(result_par[64 +: 32]), .id("1_0"), .format(1'b1));
+    DisplayFloat display_result4 (.num(result_par[96 +: 32]), .id("1_1"), .format(1'b1));
 
     // numbers assignments
     initial
@@ -41,6 +43,11 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
         $dumpvars;
 
         #100
+        if (result_par != result_seq)
+            $display("Results of matrix multiplications differ! Par vs. Seq:\n%h\n%h", result_par, result_seq);
+        else
+            $display("Results of matrix multiplications are the same");
+
         $display("Expected Values: \n(%f %f)\n(%f %f)",
             (3.2    *   4.2)  + (0.66   * (-6.4)),
             (3.2    * (0.51)) + (0.66   * ( 6.4)),

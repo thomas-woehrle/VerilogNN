@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`include "src/NeuralLayer.v"
+`include "src/NeuralLayerPar.v"
 `include "src/DisplayFloat.v"
 
 // https://stackoverflow.com/questions/31010070/verilog-vector-packing-unpacking-macro
@@ -27,9 +27,9 @@ module NeuralNetworkTB #(parameter L0 = 10, L1 = 5, L2 = 5, L3 = 5);  // input s
     reg  [31:0] weights2_arr [0:(L1 * L2) - 1];
     reg  [31:0] weights3_arr [0:(L2 * L3) - 1];
 
-    NeuralLayer #(.IN_SIZE(L0), .OUT_SIZE(L1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .activation(1'b0), .result(potential1));
-    NeuralLayer #(.IN_SIZE(L1), .OUT_SIZE(L2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .activation(1'b0), .result(potential2));
-    NeuralLayer #(.IN_SIZE(L2), .OUT_SIZE(L3)) layer3 (.in(potential2), .weights(weights3), .bias(bias3), .activation(1'b1), .result(result));
+    NeuralLayerPar #(.IN_SIZE(L0), .OUT_SIZE(L1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .activation(1'b1), .result(potential1));
+    NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .activation(1'b1), .result(potential2));
+    NeuralLayerPar #(.IN_SIZE(L2), .OUT_SIZE(L3)) layer3 (.in(potential2), .weights(weights3), .bias(bias3), .activation(1'b1), .result(result));
 
     // Terminal displaying
     for (genvar i = 0; i < L3; i = i + 1) begin

@@ -1,24 +1,24 @@
 `timescale 1ns / 1ps
 
-`ifndef _neural_layer
-`define _neural_layer
+`ifndef _neural_layer_par
+`define _neural_layer_par
 
-`include "src/MatrixMultiplication.v"
+`include "src/MatrixMultiplicationPar.v"
 `include "src/VectorAddition.v"
 `include "src/ReLU.v"
 `include "src/Sigmoid.v"
 
 
-module NeuralLayer #(parameter IN_SIZE = 1, OUT_SIZE = 1)
-                    (input  [(32 * IN_SIZE) - 1:0]            in,
-                     input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
-                     input  [(32 * OUT_SIZE) - 1:0]           bias,
-                     input                                    activation,  // 0 for ReLU, 1 for sigmoid
-                     output [(32 * OUT_SIZE) - 1:0]           result);
+module NeuralLayerPar #(parameter IN_SIZE = 1, OUT_SIZE = 1)
+                       (input  [(32 * IN_SIZE) - 1:0]            in,
+                        input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
+                        input  [(32 * OUT_SIZE) - 1:0]           bias,
+                        input                                    activation,  // 0 for ReLU, 1 for sigmoid
+                        output [(32 * OUT_SIZE) - 1:0]           result);
 
     wire [(32 * OUT_SIZE) - 1:0] res_matmul, res_bias, res_relu, res_sigmoid;
 
-    MatrixMultiplication #(.L(OUT_SIZE), .M(IN_SIZE), .N(1)) matmul(.A(weights), .B(in), .result(res_matmul));
+    MatrixMultiplicationPar #(.L(OUT_SIZE), .M(IN_SIZE), .N(1)) matmul(.A(weights), .B(in), .result(res_matmul));
     VectorAddition #(.VLEN(OUT_SIZE)) add_bias(.A(res_matmul), .B(bias), .result(res_bias));
 
     // create modules for activation functions
@@ -33,4 +33,4 @@ module NeuralLayer #(parameter IN_SIZE = 1, OUT_SIZE = 1)
     // determine output
     assign result = (activation == 1'b0) ? res_relu : res_sigmoid;
 endmodule;
-`endif // _neural_layer
+`endif // _neural_layer_par
