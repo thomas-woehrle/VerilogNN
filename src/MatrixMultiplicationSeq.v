@@ -29,6 +29,7 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
             //       32 * M = row size in B_T;            32 * N = row size in B
             assign B_T[(32 * M * i) + (32 * j) +: 32] = B[(32 * N * j) + (32 * i) +: 32];
 
+    // N * L VectorMultiplication modules from MatMulPar reduced to just 1
     VectorMultiplication #(.VLEN(M)) vector_mult (
                                                 .A(A_vector),
                                                 .B(B_vector),
@@ -37,18 +38,19 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
 
     integer cnt_a = 0, cnt_b = 0;
     always @(posedge clk) begin
-        A_vector = A[(32 * M * cnt_a) +: 32 * M];
-        B_vector = B_T[(32 * M * cnt_b) +: 32 * M];
-
-        // now we assume that the result was calculated (possibly needed to move this into next clock cycle)
+        // write the result from previous iteration (moved into next clock cycle to allow VecMult computing time)
         result[(32 * N * cnt_a) + (32 * cnt_b) +: 32] = res_scalar;
 
+        // change counter variables
         if (cnt_b >= N - 1) begin  // move to next row
             cnt_b = 0;
             cnt_a = (cnt_a >= L - 1) ? 0 : cnt_a + 1;  // cnt_a == L... wrap around to the beginning
         end else
             cnt_b = cnt_b + 1;
 
+        // change input data for VecMult (and let it compute for 1 clock cycle)
+        A_vector = A[(32 * M * cnt_a) +: 32 * M];
+        B_vector = B_T[(32 * M * cnt_b) +: 32 * M];
     end
 
 endmodule;

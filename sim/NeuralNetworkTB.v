@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 
+`include "src/NeuralLayerSeq.v"
 `include "src/NeuralLayerPar.v"
 `include "src/DisplayFloat.v"
 
@@ -9,7 +10,12 @@ for (genvar PK_IDX=0; PK_IDX<(PK_LEN); PK_IDX=PK_IDX+1) begin \
     assign PK_DEST[(PK_WIDTH)*PK_IDX +: PK_WIDTH] = PK_SRC[PK_IDX][((PK_WIDTH)-1):0]; \
 end
 
-module NeuralNetworkTB #(parameter L0 = 10, L1 = 5, L2 = 5, L3 = 5);  // input size (L0) + numbers of neurons in 3 layers
+module NeuralNetworkTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // input size (L0) + numbers of neurons in 3 layers
+    reg clk = 0;
+    always begin
+       clk = ~clk;
+       #1;
+    end
 
     wire [(32 * L0) - 1:0] in;
     wire [(32 * L1) - 1:0] potential1, bias1;
@@ -27,7 +33,7 @@ module NeuralNetworkTB #(parameter L0 = 10, L1 = 5, L2 = 5, L3 = 5);  // input s
     reg  [31:0] weights2_arr [0:(L1 * L2) - 1];
     reg  [31:0] weights3_arr [0:(L2 * L3) - 1];
 
-    NeuralLayerPar #(.IN_SIZE(L0), .OUT_SIZE(L1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .activation(1'b1), .result(potential1));
+    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .activation(1'b1), .clk(clk), .result(potential1));
     NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .activation(1'b1), .result(potential2));
     NeuralLayerPar #(.IN_SIZE(L2), .OUT_SIZE(L3)) layer3 (.in(potential2), .weights(weights3), .bias(bias3), .activation(1'b1), .result(result));
 
@@ -35,7 +41,8 @@ module NeuralNetworkTB #(parameter L0 = 10, L1 = 5, L2 = 5, L3 = 5);  // input s
     for (genvar i = 0; i < L3; i = i + 1) begin
         wire [3 * 8:1] id_;
         // $sformat(id_, "%d", i);
-        assign id_[8:1] = i + 8'h30;  // 0x30 is "0" in ASCII
+        assign id_[ 8:1] = (i % 10) + 8'h30;  // 0x30 is "0" in ASCII
+        assign id_[16:9] = (i / 10) + 8'h30;
         DisplayFloat display_result (.num(result[32 * i +: 32]), .id(id_), .format(1'b0));
     end
 

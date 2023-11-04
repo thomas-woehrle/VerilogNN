@@ -8,7 +8,6 @@
 `include "src/ReLU.v"
 `include "src/Sigmoid.v"
 
-
 module NeuralLayerPar #(parameter IN_SIZE = 1, OUT_SIZE = 1)
                        (input  [(32 * IN_SIZE) - 1:0]            in,
                         input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
