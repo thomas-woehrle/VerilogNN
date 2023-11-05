@@ -10,7 +10,7 @@ for (genvar PK_IDX=0; PK_IDX<(PK_LEN); PK_IDX=PK_IDX+1) begin \
     assign PK_DEST[(PK_WIDTH)*PK_IDX +: PK_WIDTH] = PK_SRC[PK_IDX][((PK_WIDTH)-1):0]; \
 end
 
-module NeuralNetworkTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // input size (L0) + numbers of neurons in 3 layers
+module NeuralNetworkTestTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // input size (L0) + numbers of neurons in 3 layers
     reg clk = 0;
     always begin
        clk = ~clk;
@@ -72,7 +72,7 @@ module NeuralNetworkTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // inpu
     initial
     begin
         // dump to vcd file for GTKWave
-        $dumpfile("vcd/NeuralNetworkTB.vcd");
+        $dumpfile("vcd/NeuralNetworkTestTB.vcd");
         $dumpvars;
 
         #100
