@@ -10,7 +10,7 @@ for (genvar PK_IDX=0; PK_IDX<(PK_LEN); PK_IDX=PK_IDX+1) begin \
     assign PK_DEST[(PK_WIDTH)*PK_IDX +: PK_WIDTH] = PK_SRC[PK_IDX][((PK_WIDTH)-1):0]; \
 end
 
-module NeuralNetwork1TB #(parameter L0 = 784, L1 = 15, L2 = 10);  // input size (L0) + numbers of neurons in 2 layers
+module NeuralNetwork1TB #(parameter L0 = 200, L1 = 15, L2 = 10);  // input size (L0) + numbers of neurons in 2 layers
     reg clk = 0;
     always begin
        clk = ~clk;

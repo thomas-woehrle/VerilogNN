@@ -1,13 +1,20 @@
 `timescale 1ns / 1ps
-`include "src/VectorMultiplication.v"
+`include "src/VectorMultiplicationSeq.v"
+`include "src/VectorMultiplicationPar.v"
 `include "src/DisplayFloat.v"
 
 module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
+    reg clk = 0;
+    always begin
+       clk = ~clk;
+       #1;
+    end
+
     // this syntax would not pass to the module, easier to do it as one big vector
     // reg [31:0] A, B [0:VLEN-1];
 
     reg [(32 * VLEN) - 1:0] A, B;
-    wire [31:0] result;
+    wire [31:0] result_par, result_seq;
     real value;  // real (64bit FP) not synthesizable, only for sim comparison
 
     // pack the A, B arrays (not necessary in current implementation)
@@ -17,9 +24,11 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     //     assign B_packed[32 * i +: 31] = B[i];
     // end
 
-    VectorMultiplication #(.VLEN(VLEN)) mult (.A(A), .B(B), .result(result));
+    VectorMultiplicationPar #(.VLEN(VLEN)) mult_par (.A(A), .B(B), .result(result_par));
+    VectorMultiplicationSeq #(.VLEN(VLEN)) mult_seq (.A(A), .B(B), .clk(clk), .result(result_seq));
 
-    DisplayFloat display_result (.num(result), .id("Res"), .format(1'b1));
+    DisplayFloat display_result_par (.num(result_par), .id("Par"), .format(1'b1));
+    DisplayFloat display_result_seq (.num(result_seq), .id("Seq"), .format(1'b1));
 
     // numbers assignments
     initial
@@ -49,6 +58,11 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
         $dumpvars;
 
         #100
+        if (result_par !== result_seq)
+            $display("Results of matrix multiplications differ! Par vs. Seq:\n%h\n%h", result_par, result_seq);
+        else
+            $display("Results of matrix multiplications are the same");
+
         $display("Expected Value: %f", (3.2 * 4.2) + (0.66 * 0.51) + ((-0.5) * (-6.4)) + ((-0.5) * (6.4)) + (2.82*(-0.94)));
 
         $finish;

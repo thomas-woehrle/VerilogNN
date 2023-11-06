@@ -1,15 +1,16 @@
 `timescale 1ns / 1ps
 
-`ifndef _vector_multiplication
-`define _vector_multiplication
+`ifndef _vector_multiplication_par
+`define _vector_multiplication_par
 
 `include "src/FloatingMultiplication.v"
 `include "src/FloatingAddition.v"
 
-module VectorMultiplication #(parameter VLEN = 1)
-                             (input [(32 * VLEN) - 1:0] A,
-                              input [(32 * VLEN) - 1:0] B,
-                              output [31:0] result);
+// also known as dot product
+module VectorMultiplicationPar #(parameter VLEN = 1)
+                                (input [(32 * VLEN) - 1:0] A,
+                                 input [(32 * VLEN) - 1:0] B,
+                                 output [31:0] result);
     wire [31:0] partial_sums [0:VLEN-1];
 
     genvar i;
@@ -29,4 +30,4 @@ module VectorMultiplication #(parameter VLEN = 1)
 
     assign result = partial_sums[VLEN-1];
 endmodule;
-`endif // _vector_multiplication
+`endif // _vector_multiplication_par

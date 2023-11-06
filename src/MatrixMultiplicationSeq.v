@@ -3,7 +3,7 @@
 `ifndef _matrix_multiplication_seq
 `define _matrix_multiplication_seq
 
-`include "src/VectorMultiplication.v"
+`include "src/VectorMultiplicationPar.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
 // assumed that the matrix is passed in row-major order. Output matrix will have dimensions L * N and will be
@@ -24,7 +24,7 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
 
     // N * L VectorMultiplication modules from MatMulPar reduced to just 1
     // problematically, for NN usage M is the biggest number - less cycles but more computing
-    VectorMultiplication #(.VLEN(M)) vector_mult (
+    VectorMultiplicationPar #(.VLEN(M)) vector_mult (
                                                 .A(A_vector),
                                                 .B(B_vector),
                                                 .result(res_scalar)

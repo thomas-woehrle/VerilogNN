@@ -4,10 +4,15 @@
 `include "src/DisplayFloat.v"
 
 module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float matrices
+    reg clk = 0;
+    always begin
+       clk = ~clk;
+       #1;
+    end
 
     reg  [(32 * L * M) - 1:0] A;
     reg  [(32 * M * N) - 1:0] B;
-    wire [(32 * M * N) - 1:0] B_T;
+    wire [(32 * N * M) - 1:0] B_T;
     wire [(32 * L * N) - 1:0] result_par, result_seq;
     real value[1:0][1:0];
 
@@ -17,7 +22,7 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
     assign B_T[96 +: 32] = B[96 +: 32];
 
     MatrixMultiplicationPar #(.L(L), .M(M), .N(N)) mult_par (.A(A), .B(B), .result(result_par));
-    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N)) mult_seq (.A(A), .B_T(B_T), .result(result_seq));
+    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N)) mult_seq (.A(A), .B_T(B_T), .clk(clk), .result(result_seq));
 
     DisplayFloat display_result1 (.num(result_par[0  +: 32]), .id("0_0"), .format(1'b1));
     DisplayFloat display_result2 (.num(result_par[32 +: 32]), .id("0_1"), .format(1'b1));
@@ -49,7 +54,7 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
         $dumpvars;
 
         #100
-        if (result_par != result_seq)
+        if (result_par !== result_seq)
             $display("Results of matrix multiplications differ! Par vs. Seq:\n%h\n%h", result_par, result_seq);
         else
             $display("Results of matrix multiplications are the same");

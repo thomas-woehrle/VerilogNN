@@ -3,7 +3,7 @@
 `ifndef _matrix_multiplication_par
 `define _matrix_multiplication_par
 
-`include "src/VectorMultiplication.v"
+`include "src/VectorMultiplicationPar.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
 // assumed that the matrix is passed in row-major order. Output matrix will have dimensions L * N and will be
@@ -24,7 +24,7 @@ module MatrixMultiplicationPar #(parameter L = 1, M = 1, N = 1)
 
     for(i = 0; i < L; i = i + 1)  // row index in result (selects in matrix A)
         for(j = 0; j < N; j = j + 1)  // col index in result (selects in matrix B_T)
-            VectorMultiplication #(.VLEN(M)) vector_mult (
+            VectorMultiplicationPar #(.VLEN(M)) vector_mult (
                                                 .A(A[(32 * M * i) +: 32 * M]),
                                                 .B(B_T[(32 * M * j) +: 32 * M]),
                                                 .result(result[(32 * N * i) + (32 * j) +: 32])
