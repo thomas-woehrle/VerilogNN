@@ -1,4 +1,7 @@
 
+`ifndef _e_function
+`define _e_function
+
 `include "src/FloatingAddition.v"
 `include "src/FloatingMultiplication.v"
 `include "src/FloatingDivision.v"
@@ -54,3 +57,4 @@ module e_function(x_value,result);
     end
 
 endmodule
+`endif // _e_function

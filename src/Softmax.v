@@ -1,5 +1,8 @@
-`include "E_Function.v"
-`include "VectorSum.v"
+`ifndef _softmax
+`define _softmax
+
+`include "src/E_Function.v"
+`include "src/VectorSum.v"
 `include "src/FloatingDivision.v"
 
 module Softmax #(parameter SIZE = 4) // IN SIZE should be equal to out size since each value gets a probability
@@ -31,3 +34,4 @@ module Softmax #(parameter SIZE = 4) // IN SIZE should be equal to out size sinc
 
     // probably some safety measures regarding Zero Div still needed !
 endmodule
+`endif // _softmax

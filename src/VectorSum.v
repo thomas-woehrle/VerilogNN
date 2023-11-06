@@ -1,7 +1,7 @@
 `timescale 1ns / 1ns
 
-`ifndef _vector_addition
-`define _vector_addition
+`ifndef _vector_sum
+`define _vector_sum
 
 `include "src/FloatingAddition.v"
 
@@ -27,4 +27,4 @@ module VectorSum # (parameter VLEN = 4) // ALWAYS ADJUST THE PARAMETER !!!!!!
     assign result = sumvector[32 * (VLEN-1) +: 32];
 endmodule;
 
-`endif // _vector_addition
+`endif // _vector_sum
