@@ -7,11 +7,17 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
 
     reg  [(32 * L * M) - 1:0] A;
     reg  [(32 * M * N) - 1:0] B;
+    wire [(32 * M * N) - 1:0] B_T;
     wire [(32 * L * N) - 1:0] result_par, result_seq;
     real value[1:0][1:0];
 
+    assign B_T[0  +: 32] = B[0  +: 32];
+    assign B_T[64 +: 32] = B[32 +: 32];
+    assign B_T[32 +: 32] = B[64 +: 32];
+    assign B_T[96 +: 32] = B[96 +: 32];
+
     MatrixMultiplicationPar #(.L(L), .M(M), .N(N)) mult_par (.A(A), .B(B), .result(result_par));
-    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N)) mult_seq (.A(A), .B(B), .result(result_seq));
+    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N)) mult_seq (.A(A), .B_T(B_T), .result(result_seq));
 
     DisplayFloat display_result1 (.num(result_par[0  +: 32]), .id("0_0"), .format(1'b1));
     DisplayFloat display_result2 (.num(result_par[32 +: 32]), .id("0_1"), .format(1'b1));

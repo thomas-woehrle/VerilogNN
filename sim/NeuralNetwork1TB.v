@@ -30,9 +30,9 @@ module NeuralNetwork1TB #(parameter L0 = 784, L1 = 15, L2 = 10);  // input size 
     reg  [31:0] weights2_arr [0:(L1 * L2) - 1];
 
     // layer 1... 784 -> 15 neurons, sigmoid, sequentially computed
-    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .activation(1'b1), .clk(clk), .result(potential1));
-    // layer 2 (output)... 15 -> 10 neurons, sigmoid (should be softmax), computed in parallel
-    NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .activation(1'b1), .result(result));
+    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1), .ACTIVATION(1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .clk(clk), .result(potential1));
+    // layer 2 (output)... 15 -> 10 neurons, softmax, computed in parallel
+    NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2), .ACTIVATION(2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .result(result));
 
     // Terminal displaying
     for (genvar i = 0; i < L2; i = i + 1) begin

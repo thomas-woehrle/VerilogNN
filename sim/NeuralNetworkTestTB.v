@@ -33,9 +33,9 @@ module NeuralNetworkTestTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // 
     reg  [31:0] weights2_arr [0:(L1 * L2) - 1];
     reg  [31:0] weights3_arr [0:(L2 * L3) - 1];
 
-    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .activation(1'b1), .clk(clk), .result(potential1));
-    NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .activation(1'b1), .result(potential2));
-    NeuralLayerPar #(.IN_SIZE(L2), .OUT_SIZE(L3)) layer3 (.in(potential2), .weights(weights3), .bias(bias3), .activation(1'b1), .result(result));
+    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1), .ACTIVATION(1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .clk(clk), .result(potential1));
+    NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2), .ACTIVATION(1)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .result(potential2));
+    NeuralLayerPar #(.IN_SIZE(L2), .OUT_SIZE(L3), .ACTIVATION(1)) layer3 (.in(potential2), .weights(weights3), .bias(bias3), .result(result));
 
     // Terminal displaying
     for (genvar i = 0; i < L3; i = i + 1) begin
