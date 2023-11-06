@@ -3,7 +3,7 @@
 `ifndef _matrix_multiplication_seq
 `define _matrix_multiplication_seq
 
-`include "src/VectorMultiplicationPar.v"
+`include "src/VectorMultiplicationSeq.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
 // assumed that the matrix is passed in row-major order. Output matrix will have dimensions L * N and will be
@@ -15,32 +15,60 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
                                 (input      [(32 * L * M) - 1:0] A,
                                  input      [(32 * N * M) - 1:0] B_T,  // Transposed !!!
                                  input                           clk,
-                                 output reg [(32 * L * N) - 1:0] result);
+                                 output reg [(32 * L * N) - 1:0] result,
+                                 output reg done);
     reg  [(32 * M) - 1:0] A_vector, B_vector;
+    reg  input_changed = 1'b0;  // indicates that the input changed while in a computing cycle
     wire [31:0] res_scalar;
+    wire vector_mult_done;
 
     // matrix B already transposed on input (we want tu multiply rows and columns -> subsequent parts of memory)
     // wire [(32 * N * M) - 1:0] B_T;
 
     // N * L VectorMultiplication modules from MatMulPar reduced to just 1
-    // problematically, for NN usage M is the biggest number - less cycles but more computing
-    VectorMultiplicationPar #(.VLEN(M)) vector_mult (
+    // this computation is sequential (and takes some time)
+    VectorMultiplicationSeq #(.VLEN(M)) vector_mult (
                                                 .A(A_vector),
                                                 .B(B_vector),
-                                                .result(res_scalar)
+                                                .clk(clk),
+                                                .result(res_scalar),
+                                                .done(vector_mult_done)
                                                 );
 
     integer cnt_a = 0, cnt_b = 0;
-    always @(posedge clk) begin
-        // write the result from previous iteration (moved into next clock cycle to allow VecMult computing time)
+
+    // start computing the first output
+    initial begin
+        done = 1'b0;
+
+        A_vector = A[(32 * M * cnt_a) +: 32 * M];
+        B_vector = B_T[(32 * M * cnt_b) +: 32 * M];
+    end
+
+    // flip down switches
+    always @ (A, B_T) begin
+        done = 1'b0;
+        input_changed = 1'b1;
+    end
+
+    // once output is complete, change the inputs for vector_mult
+    always @(posedge vector_mult_done) begin
+        // write the result from previous iteration (moved into next clock cycle to allow vector_mult computing time)
         result[(32 * N * cnt_a) + (32 * cnt_b) +: 32] = res_scalar;
 
-        // change counter variables
-        if (cnt_b >= N - 1) begin  // move to next row
+        // start computing from the beginning
+        if (input_changed) begin
+            cnt_a = 0;
             cnt_b = 0;
-            cnt_a = (cnt_a >= L - 1) ? 0 : cnt_a + 1;  // cnt_a == L... wrap around to the beginning
-        end else
-            cnt_b = cnt_b + 1;
+            input_changed = 1'b0;
+        end else begin
+            // change counter variables
+            if (cnt_b >= N - 1) begin  // move to next row
+                cnt_b = 0;
+                cnt_a = (cnt_a >= L - 1) ? 0 : cnt_a + 1;  // cnt_a == L... wrap around to the beginning
+            end else
+                cnt_b = cnt_b + 1;
+        end
 
         // change input data for VecMult (and let it compute for 1 clock cycle)
         A_vector = A[(32 * M * cnt_a) +: 32 * M];
