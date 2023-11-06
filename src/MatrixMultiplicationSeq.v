@@ -65,7 +65,10 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
             // change counter variables
             if (cnt_b >= N - 1) begin  // move to next row
                 cnt_b = 0;
-                cnt_a = (cnt_a >= L - 1) ? 0 : cnt_a + 1;  // cnt_a == L... wrap around to the beginning
+                if (cnt_a >= L - 1)
+                    done = 1'b1;  // cnt_a == L... calculation is done (we dont have to reset counter, it happens once input changes)
+                else
+                    cnt_a = cnt_a + 1;
             end else
                 cnt_b = cnt_b + 1;
         end

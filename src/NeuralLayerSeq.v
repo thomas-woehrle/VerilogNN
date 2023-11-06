@@ -15,11 +15,19 @@ module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, ACTIVATION = 0)
                         input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
                         input  [(32 * OUT_SIZE) - 1:0]           bias,
                         input                                    clk,
-                        output [(32 * OUT_SIZE) - 1:0]           result);
+                        output [(32 * OUT_SIZE) - 1:0]           result,
+                        output                                   done);  // only passed through from matmul, may not be 100 %
 
     wire [(32 * OUT_SIZE) - 1:0] res_matmul, res_bias;
 
-    MatrixMultiplicationSeq #(.L(OUT_SIZE), .M(IN_SIZE), .N(1)) matmul(.A(weights), .B_T(in), .clk(clk), .result(res_matmul));
+    MatrixMultiplicationSeq #(  .L(OUT_SIZE),
+                                .M(IN_SIZE),
+                                .N(1)) matmul (
+                                    .A(weights),
+                                    .B_T(in),
+                                    .clk(clk),
+                                    .result(res_matmul),
+                                    .done(done));
     VectorAddition #(.VLEN(OUT_SIZE)) add_bias(.A(res_matmul), .B(bias), .result(res_bias));
 
     // create modules for activation functions
