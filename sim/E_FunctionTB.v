@@ -12,7 +12,7 @@ module E_FunctionTB;
     initial
     begin
 
-        $dumpfile("E_FunctionTB.vcd");
+        $dumpfile("vcd/E_FunctionTB.vcd");
         $dumpvars(0,E_FunctionTB);
 
         #20;

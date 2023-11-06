@@ -1,15 +1,15 @@
 `timescale 1ns/1ns
-`include "VectorSum.v"
+`include "src/VectorSum.v"
 
 module VectorSumTB;
     reg [63:0] Vector;
     wire [31:0] result;
 
-    VectorSum V1(Vector,result);
+    VectorSum #(.VLEN(2)) V1(Vector,result);
 
-    initial 
+    initial
     begin
-        $dumpfile("VectorSumTB.vcd");
+        $dumpfile("vcd/VectorSumTB.vcd");
         $dumpvars(0,VectorSumTB);
 
         #20;

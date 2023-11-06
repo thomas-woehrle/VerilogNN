@@ -20,7 +20,7 @@ module Softmax #(parameter SIZE = 4) // IN SIZE should be equal to out size sinc
         end
     endgenerate
 
-    VectorSum V1(.Vector(E_storage), .result(sum));
+    VectorSum #(.VLEN(VLEN)) V1(.Vector(E_storage), .result(sum));
 
     genvar j;
     generate

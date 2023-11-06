@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`include "Softmax.v"
+`include "src/Softmax.v"
 
 module SoftmaxTB;
     reg [127:0] Vector;
@@ -7,9 +7,9 @@ module SoftmaxTB;
 
     Softmax S1(Vector,result);
 
-    initial 
+    initial
     begin
-        $dumpfile("SoftmaxTB.vcd");
+        $dumpfile("vcd/SoftmaxTB.vcd");
         $dumpvars(0,SoftmaxTB);
 
         //01000000000000000000000000000000  2
@@ -34,6 +34,6 @@ endmodule
 
 
 
- 
+
 
 //00111000100100001001011010011110001110011101010100111100000100110011110100111000100011001011111100111111011101000101100000001001
