@@ -53,9 +53,9 @@ module NeuralNetwork1TB #(parameter L0 = 784, L1 = 15, L2 = 10);  // input size 
     initial
     begin
         #1
-        $readmemb("data/nn1/sample_input.mem", in_arr);
+        $readmemb("data/nn1/input01.mem", in_arr);  // this will cause a warning since input file has 1 more line (true label)
         $readmemb("data/nn1/bias1.mem", bias1_arr);
-        $readmemb("data/nn1/bias1.mem", bias2_arr);
+        $readmemb("data/nn1/bias2.mem", bias2_arr);
         $readmemb("data/nn1/weights1.mem", weights1_arr);
         $readmemb("data/nn1/weights2.mem", weights2_arr);
     end
