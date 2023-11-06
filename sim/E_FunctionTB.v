@@ -1,7 +1,7 @@
 `timescale 1ns/1ns
 `include "src/E_Function.v"
 
-module e_functionTB;
+module E_FunctionTB;
 
     reg [31:0] X_val;
     wire [31:0] result;
@@ -12,8 +12,8 @@ module e_functionTB;
     initial
     begin
 
-        $dumpfile("e_functionTB.vcd");
-        $dumpvars(0,e_functionTB);
+        $dumpfile("E_FunctionTB.vcd");
+        $dumpvars(0,E_FunctionTB);
 
         #20;
         X_val = 32'b0_01111111_00000000000000000000000;//1
