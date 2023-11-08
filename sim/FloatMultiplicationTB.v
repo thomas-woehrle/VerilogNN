@@ -26,8 +26,9 @@ module FloatMultiplicationTB;
         A = 32'b1_01111110_00000000000000000000000;  // -0.5
         B = 32'b0_10000001_10011001100110011001100;  //  6.4
         #20
-        A = 32'h4034b4b5;
-        B = 32'hbf70f0f1;
+        // testing exponent underflow
+        A = 32'h0000_0000;
+        B = 32'h0000_0000;
     end
 
     // displaying
@@ -60,7 +61,7 @@ module FloatMultiplicationTB;
         $display("Expected Value : %f Result : %f",(-0.5)*(6.4),value);
         #20
         value =(2**(result[30:23]-127))*($itor({1'b1,result[22:0]})/2**23)*((-1)**(result[31]));
-        $display("Expected Value : %f Result : %f",2.82*(-0.94),value);
+        $display("Expected Value : %f Result : %f",0.0 * 0.0,value);
         $finish;
     end
 

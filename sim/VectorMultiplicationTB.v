@@ -25,7 +25,7 @@ module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     // end
 
     VectorMultiplicationPar #(.VLEN(VLEN)) mult_par (.A(A), .B(B), .result(result_par));
-    VectorMultiplicationSeq #(.VLEN(VLEN)) mult_seq (.A(A), .B(B), .clk(clk), .result(result_seq));
+    VectorMultiplicationSeq #(.VLEN(VLEN), .MOD_COUNT(2)) mult_seq (.A(A), .B(B), .clk(clk), .result(result_seq));
 
     DisplayFloat display_result_par (.num(result_par), .id("Par"), .format(1'b1));
     DisplayFloat display_result_seq (.num(result_seq), .id("Seq"), .format(1'b1));

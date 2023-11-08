@@ -26,8 +26,8 @@ module FloatingMultiplication   (input [31:0]A,
         B_Exponent = B[30:23];
         B_sign = B[31];
 
-        Temp_Exponent = A_Exponent+B_Exponent-127;
-        Temp_Mantissa = A_Mantissa*B_Mantissa;
+        Temp_Exponent = (A_Exponent + B_Exponent < 127) ? 0 : A_Exponent + B_Exponent - 127;  // prevent exponent underflow
+        Temp_Mantissa = A_Mantissa * B_Mantissa;  // multiply mantissas
         Mantissa = Temp_Mantissa[47] ? Temp_Mantissa[46:24] : Temp_Mantissa[45:23];
         Exponent = Temp_Mantissa[47] ? Temp_Exponent+1'b1 : Temp_Exponent;
         Sign = A_sign^B_sign;
