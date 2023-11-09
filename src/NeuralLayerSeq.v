@@ -9,8 +9,8 @@
 `include "src/Sigmoid.v"
 `include "src/Softmax.v"
 
-//                                                           0 - ReLU, 1 - sigmoid, 2 - softmax
-module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, ACTIVATION = 0)
+//                                                                          0 - ReLU, 1 - sigmoid, 2 - softmax
+module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTIVATION = 0)
                        (input  [(32 * IN_SIZE) - 1:0]            in,
                         input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
                         input  [(32 * OUT_SIZE) - 1:0]           bias,
@@ -22,7 +22,8 @@ module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, ACTIVATION = 0)
 
     MatrixMultiplicationSeq #(  .L(OUT_SIZE),
                                 .M(IN_SIZE),
-                                .N(1)) matmul (
+                                .N(1),
+                                .MOD_COUNT(MOD_COUNT)) matmul (
                                     .A(weights),
                                     .B_T(in),
                                     .clk(clk),

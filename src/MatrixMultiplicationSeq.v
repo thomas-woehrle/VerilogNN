@@ -11,7 +11,7 @@
 // at once and performs some calculations at the clock cycle. For NN usage, M (inputs) > L (outputs) > N = 1 is expected.
 //
 // Note that matrix B must be transposed on input (can be ignored if it has only 1 row or column).
-module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
+module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1, MOD_COUNT = 1)
                                 (input      [(32 * L * M) - 1:0] A,
                                  input      [(32 * N * M) - 1:0] B_T,  // Transposed !!!
                                  input                           clk,
@@ -26,14 +26,24 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1)
     // wire [(32 * N * M) - 1:0] B_T;
 
     // N * L VectorMultiplication modules from MatMulPar reduced to just 1
-    // this computation is sequential (and takes some time)
-    VectorMultiplicationSeq #(.VLEN(M)) vector_mult (
-                                                .A(A_vector),
-                                                .B(B_vector),
-                                                .clk(clk),
-                                                .result(res_scalar),
-                                                .done(vector_mult_done)
-                                                );
+    // based on input parameter, calculation will be either fully parallel or partially sequential
+    if (MOD_COUNT < M)
+        VectorMultiplicationSeq #(.VLEN(M), .MOD_COUNT(MOD_COUNT)) vector_mult (
+                                    .A(A_vector),
+                                    .B(B_vector),
+                                    .clk(clk),
+                                    .result(res_scalar),
+                                    .done(vector_mult_done)
+                                    );
+    else begin
+        VectorMultiplicationPar #(.VLEN(M)) vector_mult (
+                                    .A(A_vector),
+                                    .B(B_vector),
+                                    .result(res_scalar)
+                                    );
+
+        assign vector_mult_done = clk;  // min calculation time... 1 clock cycle
+    end
 
     integer cnt_a = 0, cnt_b = 0;
 

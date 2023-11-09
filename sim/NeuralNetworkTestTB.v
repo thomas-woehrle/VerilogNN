@@ -24,6 +24,7 @@ module NeuralNetworkTestTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // 
     wire [(32 * L0 * L1) - 1:0] weights1;
     wire [(32 * L1 * L2) - 1:0] weights2;
     wire [(32 * L2 * L3) - 1:0] weights3;
+    wire done;
 
     reg  [31:0] in_arr [0:L0 - 1];
     reg  [31:0] bias1_arr [0:L1 - 1];
@@ -33,7 +34,7 @@ module NeuralNetworkTestTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // 
     reg  [31:0] weights2_arr [0:(L1 * L2) - 1];
     reg  [31:0] weights3_arr [0:(L2 * L3) - 1];
 
-    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1), .ACTIVATION(1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .clk(clk), .result(potential1));
+    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1), .ACTIVATION(1), .MOD_COUNT(10)) layer1 (.in(in), .weights(weights1), .bias(bias1), .clk(clk), .result(potential1), .done(done));
     NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2), .ACTIVATION(1)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .result(potential2));
     NeuralLayerPar #(.IN_SIZE(L2), .OUT_SIZE(L3), .ACTIVATION(1)) layer3 (.in(potential2), .weights(weights3), .bias(bias3), .result(result));
 
@@ -68,15 +69,17 @@ module NeuralNetworkTestTB #(parameter L0 = 25, L1 = 20, L2 = 15, L3 = 15);  // 
         $readmemb("data/placeholder500.mem", weights3_arr, 0, (L2 * L3) - 1);
     end
 
-    // displaying
+    // dump to vcd file for GTKWave
     initial
     begin
-        // dump to vcd file for GTKWave
         $dumpfile("vcd/NeuralNetworkTestTB.vcd");
         $dumpvars;
+    end
 
-        #100
-        $display("Expected Values: TODO");
+    // end of computing
+    always @ (posedge done) begin
+        #10
+        $display("Computing finished!");
 
         $finish;
     end

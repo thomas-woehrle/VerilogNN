@@ -18,8 +18,8 @@ run/%.vvp: sim/%.v run vcd
 	iverilog -o $@ $< -s $*
 	vvp $@ >/dev/null
 
-run/NeuralNetwork1TB.vvp: sim/NeuralNetwork1TB.v
-	@ echo "Ingoring $<, takes too long"
+# run/NeuralNetwork1TB.vvp: sim/NeuralNetwork1TB.v
+# 	@ echo "Ingoring $<, takes too long"
 
 run:
 	mkdir run

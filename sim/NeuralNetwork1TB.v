@@ -10,7 +10,8 @@ for (genvar PK_IDX=0; PK_IDX<(PK_LEN); PK_IDX=PK_IDX+1) begin \
     assign PK_DEST[(PK_WIDTH)*PK_IDX +: PK_WIDTH] = PK_SRC[PK_IDX][((PK_WIDTH)-1):0]; \
 end
 
-module NeuralNetwork1TB #(parameter L0 = 20, L1 = 15, L2 = 10);  // input size (L0) + numbers of neurons in 2 layers
+//                             28 * 28 = 784
+module NeuralNetwork1TB #(parameter L0 = 100, L1 = 15, L2 = 10);  // input size (L0) + numbers of neurons in 2 layers
     reg clk = 0;
     always begin
        clk = ~clk;
@@ -31,7 +32,7 @@ module NeuralNetwork1TB #(parameter L0 = 20, L1 = 15, L2 = 10);  // input size (
     reg  [31:0] weights2_arr [0:(L1 * L2) - 1];
 
     // layer 1... 784 -> 15 neurons, sigmoid, sequentially computed
-    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1), .ACTIVATION(1)) layer1 (.in(in        ), .weights(weights1), .bias(bias1), .clk(clk), .done(done), .result(potential1));
+    NeuralLayerSeq #(.IN_SIZE(L0), .OUT_SIZE(L1), .ACTIVATION(1), .MOD_COUNT(100)) layer1 (.in(in), .weights(weights1), .bias(bias1), .clk(clk), .done(done), .result(potential1));
     // layer 2 (output)... 15 -> 10 neurons, softmax, computed in parallel
     NeuralLayerPar #(.IN_SIZE(L1), .OUT_SIZE(L2), .ACTIVATION(2)) layer2 (.in(potential1), .weights(weights2), .bias(bias2), .result(result));
 

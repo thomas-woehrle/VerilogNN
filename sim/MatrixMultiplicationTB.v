@@ -3,7 +3,7 @@
 `include "src/MatrixMultiplicationSeq.v"
 `include "src/DisplayFloat.v"
 
-module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float matrices
+module MatrixMultiplicationTB #(parameter L = 2, M = 3, N = 2);  // 2x2 float matrices
     reg clk = 0;
     always begin
        clk = ~clk;
@@ -16,13 +16,15 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
     wire [(32 * L * N) - 1:0] result_par, result_seq;
     real value[1:0][1:0];
 
-    assign B_T[0  +: 32] = B[0  +: 32];
-    assign B_T[64 +: 32] = B[32 +: 32];
-    assign B_T[32 +: 32] = B[64 +: 32];
-    assign B_T[96 +: 32] = B[96 +: 32];
+    assign B_T[0   +: 32] = B[0   +: 32];
+    assign B_T[96  +: 32] = B[32  +: 32];
+    assign B_T[32  +: 32] = B[64  +: 32];
+    assign B_T[128 +: 32] = B[96  +: 32];
+    assign B_T[64  +: 32] = B[128 +: 32];
+    assign B_T[160 +: 32] = B[160 +: 32];
 
     MatrixMultiplicationPar #(.L(L), .M(M), .N(N)) mult_par (.A(A), .B(B), .result(result_par));
-    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N)) mult_seq (.A(A), .B_T(B_T), .clk(clk), .result(result_seq));
+    MatrixMultiplicationSeq #(.L(L), .M(M), .N(N), .MOD_COUNT(2)) mult_seq (.A(A), .B_T(B_T), .clk(clk), .result(result_seq));
 
     DisplayFloat display_result1 (.num(result_par[0  +: 32]), .id("0_0"), .format(1'b1));
     DisplayFloat display_result2 (.num(result_par[32 +: 32]), .id("0_1"), .format(1'b1));
@@ -44,6 +46,12 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 2, N = 2);  // 2x2 float ma
 
         A[96  +: 32] = 32'b1_01111110_00000000000000000000000;  // -0.5
         B[96  +: 32] = 32'b0_10000001_10011001100110011001100;  //  6.4
+
+        A[128  +: 32] = 32'b1_01111110_00000000000000000000000;  // -0.5
+        B[128 +: 32] = 32'b1_10000001_10011001100110011001100;  // -6.4
+
+        A[160 +: 32] = 32'b1_01111110_00000000000000000000000;  // -0.5
+        B[160 +: 32] = 32'b0_10000001_10011001100110011001100;  //  6.4
     end
 
     // displaying
