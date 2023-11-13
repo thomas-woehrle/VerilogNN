@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`include "HyperbolicTangent.v"
+`include "src/HyperbolicTangent.v"
 
 
 module HyperbolicTangentTB;
