@@ -1,6 +1,6 @@
-`include "E_Function.v"
-`include "VectorSum.v"
-`include "FloatingDivision.v"
+`include "src/E_Function.v"
+`include "src/VectorSum.v"
+`include "src/FloatingDivision.v"
 
 module HyperbolicTangent(input    [31:0] num,
                          output   [31:0] result);
