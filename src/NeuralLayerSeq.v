@@ -8,6 +8,8 @@
 `include "src/ReLU.v"
 `include "src/Sigmoid.v"
 `include "src/Softmax.v"
+`include "src/HyperbolicTangent.v"
+`include "src/Softplus.v"
 
 //                                                                          0 - ReLU, 1 - sigmoid, 2 - softmax
 module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTIVATION = 0)
@@ -44,6 +46,13 @@ module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTI
                 Sigmoid sigmoid(.num(res_bias[32 * i +: 32]), .result(result[32 * i +: 32]));
             2:
             Softmax #(.VLEN(OUT_SIZE)) softmax(.in(res_bias), .result(result));
+          
+            3:
+            for(i = 0; i < OUT_SIZE; i = i + 1)
+                HyperbolicTangent htangent(.num(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));
+            4:
+            for(i = 0; i < OUT_SIZE; i = i + 1)
+                Softplus softplus(.x_value(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));
 
         endcase
     endgenerate
