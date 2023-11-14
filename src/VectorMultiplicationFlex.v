@@ -1,20 +1,21 @@
 `timescale 1ns / 1ps
 
-`ifndef _vector_multiplication_seq
-`define _vector_multiplication_seq
+`ifndef _vector_multiplication_flex
+`define _vector_multiplication_flex
 
 `include "src/FloatingMultiplication.v"
 `include "src/FloatingAddition.v"
 
 // also known as dot product. Sequentialized into MOD_COUNT multipliers and adders.
-// it is expected that MOD_COUNT <= VLEN (and ideally VLEN % MOD_COUNT == 0).
-// in case MOD_COUNT == VLEN this should behave similarly to VecMultPar (while being unnecessarily complex)
-module VectorMultiplicationSeq #(parameter VLEN = 1, MOD_COUNT = 1)
-                                (input [(32 * VLEN) - 1:0] A,
-                                 input [(32 * VLEN) - 1:0] B,
-                                 input                     clk,
-                                 output reg [31:0]         result,
-                                 output reg                done);  // indicates that computing is complete
+// The vector length can be changed in runtime (is passed on a wire as 32bit unsigned integer).
+// Vector length must always be <= BUFLEN parameter, so that the input fits.
+module VectorMultiplicationFlex #(parameter BUFLEN = 1024, MOD_COUNT = 1)
+                                (input [(32 * BUFLEN) - 1:0] A,
+                                 input [(32 * BUFLEN) - 1:0] B,
+                                 input                       clk,
+                                 input [31:0]                vlen,
+                                 output reg [31:0]           result,
+                                 output reg                  done);  // indicates that computing is complete
     reg  [(32 * MOD_COUNT) - 1:0] A_items = 0, B_items = 0;  // automatic padding with 0s
     wire [(32 * MOD_COUNT) - 1:0] partial_sums;
     reg  input_changed = 1'b0,  // input changed while in a computing cycle
@@ -39,7 +40,7 @@ module VectorMultiplicationSeq #(parameter VLEN = 1, MOD_COUNT = 1)
     end
 
     // flip down switches
-    always @ (A, B) begin
+    always @ (A, B, vlen) begin
         almost_done = 1'b0;
         done = 1'b0;
         input_changed = 1'b1;
@@ -74,11 +75,11 @@ module VectorMultiplicationSeq #(parameter VLEN = 1, MOD_COUNT = 1)
             i = i + 1;
 
             // loading data finished
-            if (i >= VLEN)
+            if (i >= vlen)
                 almost_done = 1'b1;
         end
 
         // computation is performed until the next clock tick (and added to result afterwards)
     end
 endmodule;
-`endif // _vector_multiplication_seq
+`endif // _vector_multiplication_flex
