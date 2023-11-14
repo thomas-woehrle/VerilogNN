@@ -1,6 +1,6 @@
-`include "FloatingAddition.v"
-`include "FloatingMultiplication.v"
-`include "FloatingDivision.v"
+`include "src/FloatingAddition.v"
+`include "src/FloatingMultiplication.v"
+`include "src/FloatingDivision.v"
 
 module LogarithmApprox(x_value,result);
 input [31:0] x_value;
