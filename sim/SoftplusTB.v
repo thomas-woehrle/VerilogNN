@@ -1,5 +1,6 @@
 `timescale 1ns/1ns
-`include "Softplus.v"
+`include "src/Softplus.v"
+`include "src/DisplayFloat.v"
 
 
 module SoftplusTB;
@@ -8,9 +9,12 @@ module SoftplusTB;
 
     Softplus S1(Vector,result);
 
-    initial 
+    DisplayFloat display_in(.num(Vector), .id("In "), .format(1'b1));
+    DisplayFloat display_res(.num(result), .id("Res"), .format(1'b1));
+
+    initial
     begin
-        $dumpfile("SoftplusTB.vcd");
+        $dumpfile("vcd/SoftplusTB.vcd");
         $dumpvars(0,SoftplusTB);
 
         #20;
