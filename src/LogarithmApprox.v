@@ -1,3 +1,6 @@
+`ifndef _logarithm_approx
+`define _logarithm_approx
+
 `include "src/FloatingAddition.v"
 `include "src/FloatingMultiplication.v"
 `include "src/FloatingDivision.v"
@@ -29,3 +32,5 @@ FloatingAddition add3(.A(sum2),.B(p4),.result(sum3));
 assign result = sum3;
 
 endmodule
+
+`endif // _logarithm_approx

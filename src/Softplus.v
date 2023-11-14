@@ -1,3 +1,6 @@
+`ifndef _softplus
+`define _softplus
+
 `include "src/LogarithmApprox.v"
 `include "src/FloatingAddition.v"
 `include "src/FloatingMultiplication.v"
@@ -37,3 +40,5 @@ always @(*) begin
 end
 
 endmodule
+
+`endif // _softplus
