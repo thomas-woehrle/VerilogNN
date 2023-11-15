@@ -47,12 +47,13 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1, MOD_COUNT = 1)
 
     integer cnt_a = 0, cnt_b = 0;
 
-    // start computing the first output
+    // start computing the first output (load M numbers)
     initial begin
         done = 1'b0;
 
-        A_vector = A[(32 * M * cnt_a) +: 32 * M];
-        B_vector = B_T[(32 * M * cnt_b) +: 32 * M];
+        //           32 * M * 0 == 0
+        A_vector = A[0 +: 32 * M];
+        B_vector = B_T[0 +: 32 * M];
     end
 
     // flip down switches
