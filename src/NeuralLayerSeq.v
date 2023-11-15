@@ -11,7 +11,16 @@
 `include "src/HyperbolicTangent.v"
 `include "src/Softplus.v"
 
-//                                                                          0 - ReLU, 1 - sigmoid, 2 - softmax
+// Neural layer performing more sequential computations. Number of computing modules can be directly set by
+// MOD_COUNT parameter, which is passed to the MatrixMultiplication module. Afterwards, one of the many activation
+// functions is applied - this is determined in compile time.
+//
+// List of available activation functions (and their respective ACTIVATION values):
+//   0 - ReLU
+//   1 - sigmoid
+//   2 - softmax (per-vector, not per-element)
+//   3 - tanh (HyperbolicTangent)
+//   4 - softplus
 module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTIVATION = 0)
                        (input  [(32 * IN_SIZE) - 1:0]            in,
                         input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
@@ -46,7 +55,7 @@ module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTI
                 Sigmoid sigmoid(.num(res_bias[32 * i +: 32]), .result(result[32 * i +: 32]));
             2:
             Softmax #(.VLEN(OUT_SIZE)) softmax(.in(res_bias), .result(result));
-          
+
             3:
             for(i = 0; i < OUT_SIZE; i = i + 1)
                 HyperbolicTangent htangent(.num(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));

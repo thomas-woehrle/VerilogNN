@@ -11,7 +11,15 @@
 `include "src/HyperbolicTangent.v"
 `include "src/Softplus.v"
 
-//                                                           0 - ReLU, 1 - sigmoid, 2 - softmax
+// Neural layer performing all computations in parallel. After matrix multiplication, one of the many activation
+// functions is applied - this is determined in compile time.
+//
+// List of available activation functions (and their respective ACTIVATION values):
+//   0 - ReLU
+//   1 - sigmoid
+//   2 - softmax (per-vector, not per-element)
+//   3 - tanh (HyperbolicTangent)
+//   4 - softplus
 module NeuralLayerPar #(parameter IN_SIZE = 1, OUT_SIZE = 1, ACTIVATION = 0)
                        (input  [(32 * IN_SIZE) - 1:0]            in,
                         input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
@@ -38,11 +46,11 @@ module NeuralLayerPar #(parameter IN_SIZE = 1, OUT_SIZE = 1, ACTIVATION = 0)
 
             3:
             for(i = 0; i < OUT_SIZE; i = i + 1)
-              HyperbolicTangent htangent(.num(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));
+                HyperbolicTangent htangent(.num(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));
 
             4:
             for(i = 0; i < OUT_SIZE; i = i + 1)
-              Softplus softplus(.x_value(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));
+                Softplus softplus(.x_value(res_bias[32 * i +: 32]),.result(result[32 * i +: 32]));
 
         endcase
     endgenerate
