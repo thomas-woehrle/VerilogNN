@@ -29,5 +29,5 @@ module VectorMultiplicationPar #(parameter VLEN = 1)
     endgenerate
 
     assign result = partial_sums[VLEN-1];
-endmodule;
+endmodule
 `endif // _vector_multiplication_par

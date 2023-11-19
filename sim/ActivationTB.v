@@ -52,4 +52,4 @@ module ActivationTB;
         #20
         $finish;
     end
-endmodule;
+endmodule

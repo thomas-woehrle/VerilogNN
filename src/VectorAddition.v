@@ -5,6 +5,7 @@
 
 `include "src/FloatingAddition.v"
 
+// add two vectors of same length VLEN element-wise
 module VectorAddition #(parameter VLEN = 1)
                        (input  [(32 * VLEN) - 1:0] A,
                         input  [(32 * VLEN) - 1:0] B,
@@ -19,5 +20,5 @@ module VectorAddition #(parameter VLEN = 1)
             FloatingAddition add1(.A(A_item), .B(B_item), .result(result[32 * i +: 32]));  // element-wise addition
         end
     endgenerate
-endmodule;
+endmodule
 `endif // _vector_addition

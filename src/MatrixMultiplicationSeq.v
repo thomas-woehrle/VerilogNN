@@ -89,5 +89,5 @@ module MatrixMultiplicationSeq #(parameter L = 1, M = 1, N = 1, MOD_COUNT = 1)
         B_vector = B_T[(32 * M * cnt_b) +: 32 * M];
     end
 
-endmodule;
+endmodule
 `endif // _matrix_multiplication_seq

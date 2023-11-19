@@ -81,5 +81,5 @@ module VectorMultiplicationFlex #(parameter BUFLEN = 1024, MOD_COUNT = 1)
 
         // computation is performed until the next clock tick (and added to result afterwards)
     end
-endmodule;
+endmodule
 `endif // _vector_multiplication_flex

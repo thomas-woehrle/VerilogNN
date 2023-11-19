@@ -27,5 +27,5 @@ module FloatingCompare (input [31:0]A,
         end
     end
 
-endmodule;
+endmodule
 `endif //_floating_compare

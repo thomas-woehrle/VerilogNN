@@ -83,5 +83,5 @@ module MatrixMultiplicationFlex #(parameter LBUF = 128, MBUF = 128, NBUF = 128, 
         B_vector = B_T[(32 * m * cnt_b) +: 32 * MBUF];
     end
 
-endmodule;
+endmodule
 `endif // _matrix_multiplication_flex

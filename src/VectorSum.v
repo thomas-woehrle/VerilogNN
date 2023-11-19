@@ -25,6 +25,6 @@ module VectorSum # (parameter VLEN = 4) // ALWAYS ADJUST THE PARAMETER !!!!!!
         end
     endgenerate
     assign result = sumvector[32 * (VLEN-1) +: 32];
-endmodule;
+endmodule
 
 `endif // _vector_sum
