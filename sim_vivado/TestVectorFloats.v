@@ -1,12 +1,13 @@
 `timescale 1ns / 1ps
 
-// Outputs various floating point numbers in designated format. Output changes on each
-// clock cycle. In order to create multiple modules giving different values, use the
+// Outputs a vector of floating point numbers in designated format. One element of output changes on each
+// clock cycle (takes some time to initialize). In order to create multiple modules giving different values, use the
 // START parameter from [0, 10].
-module TestFloats #(parameter START = 0)
-                (input clk,
-                output reg [31:0] num );
-    integer idx = START;
+module TestVectorFloats #(parameter START = 0, VLEN = 1)
+                        (input clk,
+                        output reg [(32 * VLEN) - 1:0] vec);
+    reg [31:0] num;
+    integer idx = START, vec_tracker = 0;
 
     always @ (posedge clk) begin
         case (idx)
@@ -24,7 +25,9 @@ module TestFloats #(parameter START = 0)
             default: num = 32'h0000_0000;  // also 0.0, shouldn't occur as long as START param is valid
         endcase
 
-        idx <= (idx < 10) ? idx + 1 : 0;
+        vec[32 * vec_tracker +: 32] = num;
+        idx = (idx < 10) ? idx + 1 : 0;
+        vec_tracker = (vec_tracker < VLEN - 1) ? vec_tracker + 1 : 0;
     end
 
 endmodule
