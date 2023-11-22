@@ -1,9 +1,9 @@
 `ifndef _logarithm_approx
 `define _logarithm_approx
 
-`include "src/FloatingAddition.v"
-`include "src/FloatingMultiplication.v"
-`include "src/FloatingDivision.v"
+`include "FloatingAddition.v"
+`include "FloatingMultiplication.v"
+`include "FloatingDivision.v"
 
 // approximates ln(1 + e^x) using 4th degree Taylor polynomial.
 // f(x) = ln(2) + (x / 2) + (x^2 / 8) - (x^4 / 192)

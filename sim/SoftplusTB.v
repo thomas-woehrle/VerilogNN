@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
-`include "src/Softplus.v"
-`include "src/DisplayFloat.v"
+`include "Softplus.v"
+`include "DisplayFloat.v"
 
 
 module SoftplusTB;

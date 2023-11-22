@@ -3,7 +3,7 @@
 `ifndef _vector_addition
 `define _vector_addition
 
-`include "src/FloatingAddition.v"
+`include "FloatingAddition.v"
 
 // add two vectors of same length VLEN element-wise
 module VectorAddition #(parameter VLEN = 1)

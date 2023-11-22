@@ -3,7 +3,7 @@
 `ifndef _vector_sum
 `define _vector_sum
 
-`include "src/FloatingAddition.v"
+`include "FloatingAddition.v"
 
 // outputs the sum of all values in the input vector
 module VectorSum # (parameter VLEN = 4) // ALWAYS ADJUST THE PARAMETER !!!!!!

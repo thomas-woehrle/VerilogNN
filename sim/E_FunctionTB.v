@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
-`include "src/E_Function.v"
-`include "src/DisplayFloat.v"
+`include "E_Function.v"
+`include "DisplayFloat.v"
 
 module E_FunctionTB;
 

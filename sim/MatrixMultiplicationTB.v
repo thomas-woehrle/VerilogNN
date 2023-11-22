@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
-`include "src/MatrixMultiplicationPar.v"
-`include "src/MatrixMultiplicationSeq.v"
-`include "src/MatrixMultiplicationFlex.v"
-`include "src/DisplayFloat.v"
+`include "MatrixMultiplicationPar.v"
+`include "MatrixMultiplicationSeq.v"
+`include "MatrixMultiplicationFlex.v"
+`include "DisplayFloat.v"
 
 module MatrixMultiplicationTB #(parameter L = 2, M = 3, N = 2);  // 2x2 float matrices
     reg clk = 0;

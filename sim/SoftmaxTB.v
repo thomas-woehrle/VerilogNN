@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`include "src/Softmax.v"
+`include "Softmax.v"
 
 module SoftmaxTB;
     reg [127:0] Vector;

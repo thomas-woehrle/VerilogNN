@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`include "src/VectorSum.v"
+`include "VectorSum.v"
 
 module VectorSumTB;
     reg [63:0] Vector;

@@ -5,7 +5,7 @@
 `ifndef _floating_addition
 `define _floating_addition
 
-`include "src/FloatingCompare.v"
+`include "FloatingCompare.v"
 
 module FloatingAddition (input [31:0]A,
                          input [31:0]B,

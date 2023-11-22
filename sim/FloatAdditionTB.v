@@ -1,8 +1,8 @@
 // https://github.com/akilm/FPU-IEEE-754
 
 `timescale 1ns / 1ps
-`include "src/FloatingAddition.v"
-`include "src/DisplayFloat.v"
+`include "FloatingAddition.v"
+`include "DisplayFloat.v"
 
 module FloatAdditionTB;
     reg [31:0] A,B;

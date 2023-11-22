@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
-`include "src/VectorMultiplicationSeq.v"
-`include "src/VectorMultiplicationPar.v"
-`include "src/VectorMultiplicationFlex.v"
-`include "src/DisplayFloat.v"
+`include "VectorMultiplicationSeq.v"
+`include "VectorMultiplicationPar.v"
+`include "VectorMultiplicationFlex.v"
+`include "DisplayFloat.v"
 
 module VectorMultiplicationTB #(parameter VLEN = 5);  // 5-element float vectors
     reg clk = 0;

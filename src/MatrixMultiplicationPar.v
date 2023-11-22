@@ -3,7 +3,7 @@
 `ifndef _matrix_multiplication_par
 `define _matrix_multiplication_par
 
-`include "src/VectorMultiplicationPar.v"
+`include "VectorMultiplicationPar.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
 // assumed that the matrix is passed in row-major order. Output matrix will have dimensions L * N and will be

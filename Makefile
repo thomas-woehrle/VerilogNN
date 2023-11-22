@@ -15,7 +15,8 @@ clean:
 run/%.vvp: sim/%.v run vcd
 # -o... output file name
 # -s... starting point (module name)
-	iverilog -o $@ $< -s $*
+# -I... where to search for includes (everything from src/ directory)
+	iverilog -o $@ $< -s $* -I src/
 	vvp $@ >/dev/null
 
 # run/NeuralNetwork1TB.vvp: sim/NeuralNetwork1TB.v

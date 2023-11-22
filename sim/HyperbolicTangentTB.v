@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
-`include "src/HyperbolicTangent.v"
-`include "src/DisplayFloat.v"
+`include "HyperbolicTangent.v"
+`include "DisplayFloat.v"
 
 
 module HyperbolicTangentTB;

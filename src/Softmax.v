@@ -1,9 +1,9 @@
 `ifndef _softmax
 `define _softmax
 
-`include "src/E_Function.v"
-`include "src/VectorSum.v"
-`include "src/FloatingDivision.v"
+`include "E_Function.v"
+`include "VectorSum.v"
+`include "FloatingDivision.v"
 
 module Softmax #(parameter VLEN = 4) // IN SIZE should be equal to out size since each value gets a probability
                 (input  [(32 * VLEN) - 1 : 0]   in,

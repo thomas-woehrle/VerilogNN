@@ -19,8 +19,8 @@
 `ifndef _floating_division
 `define _floating_division
 
-`include "src/FloatingMultiplication.v"
-`include "src/FloatingAddition.v"
+`include "FloatingMultiplication.v"
+`include "FloatingAddition.v"
 
 // Uses Newton Raphson Iterations to find the reciprocal of the Divisor and then Multiplies the Reciprocal with the Dividend.
 module FloatingDivision(input [31:0]A,

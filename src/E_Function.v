@@ -2,9 +2,9 @@
 `ifndef _e_function
 `define _e_function
 
-`include "src/FloatingAddition.v"
-`include "src/FloatingMultiplication.v"
-`include "src/FloatingDivision.v"
+`include "FloatingAddition.v"
+`include "FloatingMultiplication.v"
+`include "FloatingDivision.v"
 
 // approximates exponential function using 5th degree Taylor polynomial. For negative inputs,
 // calculates e^(-x) instead (to avoid negative polynomial values) and outputs inverse of it.

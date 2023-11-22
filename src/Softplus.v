@@ -1,11 +1,11 @@
 `ifndef _softplus
 `define _softplus
 
-`include "src/LogarithmApprox.v"
-`include "src/FloatingAddition.v"
-`include "src/FloatingMultiplication.v"
-`include "src/FloatingDivision.v"
-`include "src/FloatingCompare.v"
+`include "LogarithmApprox.v"
+`include "FloatingAddition.v"
+`include "FloatingMultiplication.v"
+`include "FloatingDivision.v"
+`include "FloatingCompare.v"
 
 
 

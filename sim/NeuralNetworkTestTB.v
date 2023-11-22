@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
-`include "src/NeuralLayerSeq.v"
-`include "src/NeuralLayerPar.v"
-`include "src/DisplayFloat.v"
+`include "NeuralLayerSeq.v"
+`include "NeuralLayerPar.v"
+`include "DisplayFloat.v"
 
 // https://stackoverflow.com/questions/31010070/verilog-vector-packing-unpacking-macro
 `define PACK_ARRAY(PK_WIDTH,PK_LEN,PK_SRC,PK_DEST,PK_IDX) \

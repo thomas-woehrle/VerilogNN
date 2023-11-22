@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
-`include "src/ReLU.v"
-`include "src/Sigmoid.v"
-`include "src/DisplayFloat.v"
+`include "ReLU.v"
+`include "Sigmoid.v"
+`include "DisplayFloat.v"
 
 module ActivationTB;
     reg [31:0] num;

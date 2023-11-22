@@ -2,7 +2,7 @@
 // slightly modified for use with GTKWave
 
 `timescale 1ns / 1ps
-`include "src/FloatingMultiplication.v"
+`include "FloatingMultiplication.v"
 
 module FloatMultiplicationTB;
     reg [31:0] A,B;

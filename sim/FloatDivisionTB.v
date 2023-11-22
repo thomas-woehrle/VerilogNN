@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
-`include "src/FloatingDivision.v"
-`include "src/DisplayFloat.v"
+`include "FloatingDivision.v"
+`include "DisplayFloat.v"
 
 module FloatDivisionTB;
     reg [31:0] A, B;

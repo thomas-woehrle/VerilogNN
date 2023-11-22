@@ -3,8 +3,8 @@
 `ifndef _vector_multiplication_par
 `define _vector_multiplication_par
 
-`include "src/FloatingMultiplication.v"
-`include "src/FloatingAddition.v"
+`include "FloatingMultiplication.v"
+`include "FloatingAddition.v"
 
 // also known as dot product
 module VectorMultiplicationPar #(parameter VLEN = 1)

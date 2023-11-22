@@ -1,9 +1,9 @@
 `ifndef _hyperbolic_tangent
 `define _hyperbolic_tangent
 
-`include "src/E_Function.v"
-`include "src/FloatingDivision.v"
-`include "src/FloatingAddition.v"
+`include "E_Function.v"
+`include "FloatingDivision.v"
+`include "FloatingAddition.v"
 
 // Hyperbolic tangent calculated using exponential function as following:
 // f(x) = (e^num - e^(-num)) / (e^num + e^(-num))

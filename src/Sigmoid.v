@@ -3,7 +3,7 @@
 `ifndef _sigmoid
 `define _sigmoid
 
-`include "src/FloatingDivision.v"
+`include "FloatingDivision.v"
 
 // implementing so-called fast sigmoid, approximating with x / (1 + abs(x))
 // result is transformed to range <0, 1> for consistency with typical NN usage
