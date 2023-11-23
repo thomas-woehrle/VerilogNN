@@ -3,7 +3,7 @@
 // Outputs various floating point numbers considered as "edge-cases". Output changes on each
 // clock cycle. In order to create multiple modules giving different values, use the
 // START parameter from [0, 5].
-module TestFloats #(parameter START = 0)
+module TestFloatsEdgecases #(parameter START = 0)
                 (input clk,
                 output reg [31:0] num );
     integer idx = START;
