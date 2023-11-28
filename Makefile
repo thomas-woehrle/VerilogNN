@@ -17,7 +17,7 @@ run/%.vvp: sim/%.v run vcd
 # -s... starting point (module name)
 # -I... where to search for includes (everything from src/ directory)
 	iverilog -o $@ $< -s $* -I src/
-	vvp $@ >/dev/null
+	vvp $@ -lxt2 >/dev/null
 
 # run/NeuralNetwork1TB.vvp: sim/NeuralNetwork1TB.v
 # 	@ echo "Ingoring $<, takes too long"
