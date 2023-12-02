@@ -11,7 +11,6 @@ module VectorAdditionFlex #(parameter LBUF = 128)
     reg  [32 * LBUF - 1:0] A_storage, B_storage;
     reg  input_changed = 1'b0;
     wire [32 * LBUF - 1:0] res_sum;
-    wire vector_addition_done;
 
     integer count = 0;
  
