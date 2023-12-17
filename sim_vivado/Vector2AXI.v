@@ -36,7 +36,7 @@ module Vector2AXI #(VLEN = 1, START_ADDR = 'hA000_0000, MEM_SIZE = 'h1FFF)
     assign aw_burst = 2'b01;  // INCR
 
     initial begin
-        process_step <= 'b1;
+        process_step <= 'b0;
         idx <= 0;
 
         aw_valid <= 1'b0;
@@ -47,7 +47,7 @@ module Vector2AXI #(VLEN = 1, START_ADDR = 'hA000_0000, MEM_SIZE = 'h1FFF)
 
     // reset when input data changes
     always @ (vec) begin
-        process_step <= 'b1;
+        process_step <= 'b0;
         idx <= 0;
 
         aw_valid <= 1'b0;
@@ -56,64 +56,64 @@ module Vector2AXI #(VLEN = 1, START_ADDR = 'hA000_0000, MEM_SIZE = 'h1FFF)
         w_last <= 1'b0;
     end
 
-    // send address (validate aw bus)
-    always @ (posedge clk & process_step[0]) begin
-        aw_valid <= 1'b1;
-        process_step <= process_step << 1;
-    end
-
-    // confirm received address
-    always @ (posedge aw_ready & process_step[1]) begin
-        aw_valid <= 1'b0;
-        process_step <= process_step << 1;
-    end
-
-    // send first data beat (validate w bus)
-    always @ (posedge clk & process_step[2]) begin
-        w_data <= vec[31:0];  // == [32 * 0 +: 32]
-        w_valid <= 1'b1;
-        idx <= 1;
-        process_step <= process_step << 1;
-    end
-
-    // confirm received data, send next beat every clock cycle (until the last one)
-    always @ (posedge clk & w_ready & process_step[3]) begin
-        w_data <= vec[32 * idx +: 32];
-        idx <= idx + 1;
-
-        if (idx >= VLEN - 1) begin  // we just sent last beat
-            w_last <= 1'b1;
-            process_step <= process_step << 1;
+    always @ (posedge clk) begin
+        case (process_step)
+        0: begin
+            // send address (validate aw bus)
+            aw_valid <= 1'b1;
+            process_step <= process_step + 1;
         end
-    end
+        1: begin
+            // confirm received address
+            if (aw_ready) begin
+                aw_valid <= 1'b0;
+                process_step <= process_step + 1;
+            end
+        end
+        2: begin
+            // send first data beat (validate w bus)
+            w_data <= vec[31:0];  // == [32 * 0 +: 32]
+            w_valid <= 1'b1;
+            idx <= 1;
+            process_step <= process_step + 1;
+        end
+        3: begin
+            // confirm received data, send next beat every clock cycle (until the last one)
+            if (w_ready) begin
+                w_data <= vec[32 * idx +: 32];
+                idx <= idx + 1;
 
-    // terminate data sending process
-    always @ (posedge clk & process_step[4]) begin
-        w_data <= 32'b0;
-        w_last <= 1'b0;
-        w_valid <= 1'b0;
+                if (idx >= VLEN - 1) begin  // we just sent last beat
+                    w_last <= 1'b1;
+                    process_step <= process_step + 1;
+                end
+            end
+        end
+        4: begin
+            // terminate data sending process
+            w_data <= 32'b0;
+            w_last <= 1'b0;
+            w_valid <= 1'b0;
 
-        idx <= 0;
-        process_step <= process_step << 1;
-    end
+            idx <= 0;
+            process_step <= process_step + 1;
+        end
+        5: begin
+            // receive, store write response
+            if (b_valid) begin
+                b_ready <= 1'b1;
+                b_resp_cache <= b_resp;
+            end
+        end
+        6: begin
+            // react to write response
+            b_ready <= 1'b0;
 
-    // receive write response
-    always @ (posedge b_valid & process_step[5]) begin
-        b_ready <= 1'b1;
-        b_resp_cache <= b_resp;
-
-        // hi bit of b_resp indicates error
-        // in case of error, return to 1st step (sending address)
-        process_step <= process_step << 1;
-    end
-
-    // react to write response
-    always @ (posedge clk & process_step[6]) begin
-        b_ready <= 1'b0;
-
-        // high bit of b_resp indicates error
-        // in case of error, return to 1st step (sending address)
-        process_step <= (b_resp_cache[1]) ? 'b1 : process_step << 1;
+            // high bit of b_resp indicates error
+            // in case of error, return to 1st step (sending address)
+            process_step <= (b_resp_cache[1]) ? 'b0 : process_step + 1;
+        end
+        endcase
     end
 
 endmodule
