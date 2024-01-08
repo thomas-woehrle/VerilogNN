@@ -12,7 +12,7 @@ module TestFloats #(parameter START = 0)
     reg  [31:0] num_arr [0:NUM_COUNT - 1];
 
     initial begin
-        $readmemb("placeholder500.mem", num_arr, 0, NUM_COUNT - 1);
+        $readmemb("/usr/prakt/w0029/NN.FPGA/Codebase/data/placeholder500.mem", num_arr, 0, NUM_COUNT - 1);
     end
 
     always @ (posedge clk) begin
