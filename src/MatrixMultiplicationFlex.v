@@ -41,10 +41,12 @@ module MatrixMultiplicationFlex #(parameter LBUF = 128, MBUF = 128, NBUF = 128, 
                                 );
 
     integer cnt_a = 0, cnt_b = 0;
+    integer counter = 0;
 
     // start computing the first output (load m numbers)
     initial begin
         done = 1'b0;
+        result <= 0;
 
         A_vector <= A[0 +: 32 * MBUF];    // m would be sufficient, but this must be constant expression
         B_vector <= B_T[0 +: 32 * MBUF];  // this might overflow the sensible values in A, B_T (should be zero-padded)
@@ -52,19 +54,21 @@ module MatrixMultiplicationFlex #(parameter LBUF = 128, MBUF = 128, NBUF = 128, 
 
     // flip down switches
     always @ (A, B_T, l, m, n) begin
+        A_vector <= A[0 +: 32 * MBUF];    // m would be sufficient, but this must be constant expression
+        B_vector <= B_T[0 +: 32 * MBUF];  // this might overflow the sensible values in A, B_T (should be zero-padded)
+
         done <= 1'b0;
         input_changed <= 1'b1;
     end
 
     // once output is complete, change the inputs for vector_mult
     always @(posedge vector_mult_done) begin
-        // write the result from previous iteration (moved into next clock cycle to allow vector_mult computing time)
-        result[(32 * n * cnt_a) + (32 * cnt_b) +: 32] = res_scalar;
 
         // start computing from the beginning
         if (input_changed) begin
             cnt_a = 0;
             cnt_b = 0;
+            counter = 0;
             input_changed = 1'b0;
         end else begin
             // change counter variables (valid ranges: 0, 1, ..., n/l - 1)
@@ -78,9 +82,13 @@ module MatrixMultiplicationFlex #(parameter LBUF = 128, MBUF = 128, NBUF = 128, 
                 cnt_b = cnt_b + 1;
         end
 
-        // change input data for VecMult (and let it compute for 1 clock cycle)
-        A_vector = A[(32 * m * cnt_a) +: 32 * MBUF];  // possible overflow of A, B_T (especially if LBUF or NBUF is set low)
-        B_vector = B_T[(32 * m * cnt_b) +: 32 * MBUF];
+        result[(32 * counter) +: 32] = res_scalar;
+        counter = counter + 1;
+        A_vector <= A[(32 * m * counter) +: 32 * MBUF];
+
+        if (counter >= l) begin
+            done = 1;
+        end
     end
 
 endmodule
