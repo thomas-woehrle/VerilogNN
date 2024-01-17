@@ -56,6 +56,7 @@ FPGA board. However, for basic testing this might get unnecessarily complex, as 
 As the resulting modules need to interact with the memory shared between FPGA and CPU on the Kria board, the process of uploading and running modules
 on Kria board is not so straightforward. It seems that when the identical bitstream is uploaded directly from Vivado ("Program Device" button),
 this memory interaction on the board is not working. Following steps are taken from this [Xilinx example](https://xilinx.github.io/kria-apps-docs/creating_applications/2022.1/build/html/docs/vivado_accel_example.html#).
+(As Xilinx has the tendency to remove older online resources, in case previous link doesn’t work, [try this](http://web.archive.org/web/20240117153005/https://xilinx.github.io/kria-apps-docs/creating_applications/2022.1/build/html/docs/vivado_accel_example.html))
 
 ### Prerequisites
 - Vivado (design modelling, `.bit.bin` bitstream, `.xsa` design file)
