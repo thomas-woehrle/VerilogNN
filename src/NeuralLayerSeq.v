@@ -22,7 +22,7 @@
 //   3 - tanh (HyperbolicTangent)
 //   4 - softplus
 module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTIVATION = 0)
-                       (input  [(32 * IN_SIZE) - 1:0]            in,
+                       (input  [(32 * IN_SIZE) - 1:0]            data,
                         input  [(32 * OUT_SIZE * IN_SIZE) - 1:0] weights,
                         input  [(32 * OUT_SIZE) - 1:0]           bias,
                         input                                    clk,
@@ -36,7 +36,7 @@ module NeuralLayerSeq #(parameter IN_SIZE = 1, OUT_SIZE = 1, MOD_COUNT = 1, ACTI
                                 .N(1),
                                 .MOD_COUNT(MOD_COUNT)) matmul (
                                     .A(weights),
-                                    .B_T(in),
+                                    .B_T(data),
                                     .clk(clk),
                                     .result(res_matmul),
                                     .done(done));

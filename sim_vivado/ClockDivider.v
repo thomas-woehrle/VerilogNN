@@ -6,7 +6,7 @@
 module ClockDivider #(RATIO_EXP = 1)
                         (input clk_in,
                         output clk_out);
-    reg [RATIO_EXP - 1:0] ctr;
+    reg [RATIO_EXP - 1:0] ctr = 0;
     assign clk_out = ctr[RATIO_EXP - 1];
 
     always @ (posedge clk_in) begin
