@@ -16,6 +16,9 @@ reg [10:0] bram_portb_0_addr = 0;  // address writing to (indexed from 0x0)
 reg [31:0] bram_portb_0_din = 0;   // data to write to (prototype... counter)
 reg bram_portb_0_we = 1'b0;        // writing in process
 
+// alternative to a counter -- fixed value to all cells (comment out increments)
+// reg [31:0] bram_portb_0_din = 32'hdead_feed;
+
 // BRAM memory 2048 x 32-bit (total 8 KiB)
 // => 11-bit addresses, 11'h000 - 11'h7ff
 blk_mem_gen_0 blk_mem_gen_0_inst (
