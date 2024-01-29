@@ -21,7 +21,8 @@ module Vector2BRAM #(VLEN = 1)
     reg [31:0] bram_portb_0_din = 0;         // data to write to
     reg bram_portb_0_we = 1'b0;              // writing in process
 
-    reg data_changed = 1'b1;                 // internal equivalent to input rst
+    reg [15:0] periodic_reset = 'b0;         // refresh memory every 2 ** 16 clock cycles (instead of sensitivity list on vec)
+    // reg data_changed = 1'b1;
 
     // BRAM memory 2048 x 32-bit (total 8 KiB == 2 ** 13 B)
     // => 11-bit addresses, 11'h000 - 11'h7ff
@@ -45,25 +46,32 @@ module Vector2BRAM #(VLEN = 1)
     // Write data into BRAM
     always @(posedge clk)
     begin
-        if (rst || data_changed) begin
+        if (rst) begin
+            bram_portb_0_addr <= 0;
+            bram_portb_0_din <= 0;
+            bram_portb_0_we <= 1'b0;
+        end else if (&periodic_reset == 1'b1) begin  // unary reduction - all ones in periodic_reset
             bram_portb_0_addr <= 0;
             bram_portb_0_din <= vec[31:0];
-            bram_portb_0_we <= 1'b0;
-            data_changed <= 1'b0;
+            bram_portb_0_we <= 1'b1;
+            // data_changed <= 1'b0;
         end else begin
-            if (bram_portb_0_addr < VLEN /* max 11'h7ff */) begin
+            if (bram_portb_0_addr < 11'h7ff) begin
                 bram_portb_0_addr <= bram_portb_0_addr + 1;
-                bram_portb_0_din <= vec[32 * (bram_portb_0_addr + 1) +: 32];  // address change is one clock cycle behind (therefore, add 1)
+                // address change is one clock cycle behind (therefore, add 1)                   vvv
+                bram_portb_0_din <= (bram_portb_0_addr < VLEN - 1) ? vec[32 * (bram_portb_0_addr + 1) +: 32] : 32'hdead_feed;
                 bram_portb_0_we <= 1'b1;
             end else begin
                 bram_portb_0_we <= 1'b0;
             end
         end
+
+        periodic_reset <= periodic_reset + 1;
     end
 
     // reset when input data changes
-    always @ (vec) begin
-        data_changed <= 1'b1;
-    end
+    // always @ (vec) begin
+    //     data_changed <= 1'b1;
+    // end
 
 endmodule
