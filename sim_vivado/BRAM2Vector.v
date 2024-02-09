@@ -17,11 +17,12 @@ module BRAM2Vector #(VLEN = 1)
                         input bram_porta_0_we);
 
     // port B... read
-    reg [10:0] bram_portb_0_addr = 0;        // address writing to (indexed from 0x0)
+    reg [15:0] bram_portb_0_addr = 0;        // address writing to (indexed from 0x0), plus extra hi bits to delay the overflow
     wire [31:0] bram_portb_0_dout;           // data read from memory
     reg bram_portb_0_en = 1'b0;              // writing in process
 
-    reg [15:0] periodic_reset = 'b0;         // refresh memory every 2 ** 16 clock cycles (instead of sensitivity list on vec)
+    // periodic reset is replaced by cycling through bram_portb_0_addr
+    // reg [15:0] periodic_reset = 'b0;         // refresh memory every 2 ** 16 clock cycles (instead of sensitivity list on vec)
     // reg data_changed = 1'b1;
 
     // BRAM memory 2048 x 32-bit (total 8 KiB == 2 ** 13 B)
@@ -38,7 +39,7 @@ module BRAM2Vector #(VLEN = 1)
         .clkb  (clk),
         .enb   (bram_portb_0_en),
         .web   (1'b0),
-        .addrb (bram_portb_0_addr),
+        .addrb (bram_portb_0_addr[10:0]),  // bottom 11 bits used for addressing
         .dinb  (),
         .doutb (bram_portb_0_dout)
     );
@@ -46,26 +47,24 @@ module BRAM2Vector #(VLEN = 1)
     // Read data from BRAM
     always @(posedge clk)
     begin
-        if (rst) begin
+        if (rst) begin  // reset address and turn off the memory access (en)
             bram_portb_0_addr <= 0;
-            vec[31:0] <= 0;
+            // vec <= 0;
             bram_portb_0_en <= 1'b0;
-        end else if (&periodic_reset == 1'b1) begin  // unary reduction - all ones in periodic_reset
+        end else if (&bram_portb_0_addr == 1'b1) begin  // unary reduction - all ones in address (periodic reset)
             bram_portb_0_addr <= 0;
-            vec[31:0] <= bram_portb_0_dout;
             bram_portb_0_en <= 1'b1;
         end else begin
-            if (bram_portb_0_addr < VLEN - 2) begin
-                bram_portb_0_addr <= bram_portb_0_addr + 1;
-                // address change is one clock cycle behind (therefore, add 1)
-                vec[32 * (bram_portb_0_addr + 1) +: 32] <= bram_portb_0_dout;
+            if (bram_portb_0_addr < VLEN) begin  // 1 more than Vector2BRAM, because no read occurs in the reset ("0th tick")
+
+                // both address and dout are "one clock cycle behind"... don't add/subtract anything
+                vec[32 * bram_portb_0_addr +: 32] <= bram_portb_0_dout;
                 bram_portb_0_en <= 1'b1;
             end else begin
                 bram_portb_0_en <= 1'b0;
             end
+            bram_portb_0_addr <= bram_portb_0_addr + 1;  // also serves as a periodic reset
         end
-
-        periodic_reset <= periodic_reset + 1;
     end
 
 endmodule
