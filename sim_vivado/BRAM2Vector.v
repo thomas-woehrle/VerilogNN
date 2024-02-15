@@ -6,7 +6,7 @@
 // Works only for any VLEN that fits into the memory (VLEN < 11'h7ff for default 8 KiB memory).
 module BRAM2Vector #(VLEN = 1)
                         (input clk,
-                        output reg [(32 * VLEN) - 1:0] vec,
+                        output [(32 * VLEN) - 1:0] vec,
 
                         // port A... write
                         input [12:0] bram_porta_0_addr,  // we have this many bytes of memory (last two addr bits ignored)
@@ -16,10 +16,14 @@ module BRAM2Vector #(VLEN = 1)
                         input rst,
                         input bram_porta_0_we);
 
+    // protect writing over the limit
+    reg [(32 * VLEN + 1) - 1:0] vec_wider;
+    assign vec = vec_wider[(32 * VLEN) - 1:0];
+
     // port B... read
     reg [15:0] bram_portb_0_addr = 0;        // address writing to (indexed from 0x0), plus extra hi bits to delay the overflow
     wire [31:0] bram_portb_0_dout;           // data read from memory
-    reg bram_portb_0_en = 1'b0;              // writing in process
+    reg bram_portb_0_en = 1'b1;              // module turned on
 
     // periodic reset is replaced by cycling through bram_portb_0_addr
     // reg [15:0] periodic_reset = 'b0;         // refresh memory every 2 ** 16 clock cycles (instead of sensitivity list on vec)
@@ -38,7 +42,7 @@ module BRAM2Vector #(VLEN = 1)
         // PL fabric access
         .clkb  (clk),
         .enb   (bram_portb_0_en),
-        .web   (1'b0),
+        .web   (1'b0),  // writing disabled
         .addrb (bram_portb_0_addr[10:0]),  // bottom 11 bits used for addressing
         .dinb  (),
         .doutb (bram_portb_0_dout)
@@ -55,10 +59,15 @@ module BRAM2Vector #(VLEN = 1)
             bram_portb_0_addr <= 0;
             bram_portb_0_en <= 1'b1;
         end else begin
-            if (bram_portb_0_addr < VLEN) begin  // 1 more than Vector2BRAM, because no read occurs in the reset ("0th tick")
+            if (bram_portb_0_addr < VLEN + 1) begin  // 2 more than Vector2BRAM; vector write is one tick behind instead of forward
 
-                // both address and dout are "one clock cycle behind"... don't add/subtract anything
-                vec[32 * bram_portb_0_addr +: 32] <= bram_portb_0_dout;
+                // dout... "one clock cycle behind"
+                // however, non-blocking only fixes RHS (out), not the dynamic vector index (addr)
+                // this behaves differently than in Vector2BRAM, where the vec (therefore also dynamic index) is on RHS
+                // therefore, address increases before the index is evaluated -> subtract 1 from address
+                //     lo... addr = 1 (after increment), write to vec[0 +: 32]
+                //     hi... addr = VLEN + 1, write to vec[32 * VLEN +: 32]... seems illegal, but the last value is skipped otherwise
+                vec_wider[32 * (bram_portb_0_addr - 1) +: 32] <= bram_portb_0_dout;
                 bram_portb_0_en <= 1'b1;
             end else begin
                 bram_portb_0_en <= 1'b0;
