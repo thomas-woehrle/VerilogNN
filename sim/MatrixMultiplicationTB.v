@@ -82,8 +82,6 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 3, N = 2);  // 2x2 float ma
         //     ((-0.5) *   4.2)  + ((-0.5) * (-6.4)),
         //     ((-0.5) * (0.51)) + ((-0.5) * ( 6.4)));
 
-        #100
-        $finish;
     end
 
     // playing with flex module
@@ -93,24 +91,26 @@ module MatrixMultiplicationTB #(parameter L = 2, M = 3, N = 2);  // 2x2 float ma
         n <= 2;
         $display("[Flex] 2x3, 3x2");
 
-        #40
+        #400;
         l <= 2;
         m <= 2;
         n <= 2;
         $display("[Flex] 2x2, 2x2");
 
-        #40
+        #400;
         l <= 2;
         m <= 2;
         n <= 1;
         $display("[Flex] 2x2, 2x1");
 
-        #20
+        #200;
         l <= 1;
         m <= 2;
         n <= 1;
         $display("[Flex] 1x2, 2x1 (vector multiplication)");
 
+        #200;
+        $finish;
     end
 
 endmodule
