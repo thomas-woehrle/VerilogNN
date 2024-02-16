@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
 
+`ifndef _vector_addition_flex
+`define _vector_addition_flex
+
 module VectorAdditionFlex #(parameter LBUF = 128)
                             (input [(32*LBUF)-1:0] A,
                              input [(32*LBUF)-1:0] B,
@@ -52,18 +55,4 @@ module VectorAdditionFlex #(parameter LBUF = 128)
     end
 
 endmodule
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+`endif  // _vector_addition_flex
