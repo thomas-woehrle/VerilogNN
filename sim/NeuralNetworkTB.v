@@ -1,12 +1,12 @@
 `timescale 1ns / 1ps
 
-`include "NeuralNetworkNew.v"
+`include "NeuralNetwork.v"
 
-module NeuralNetworkNewTB;
-    parameter NR_LAYERS = 2, INPUTSIZE = 4, OUTPUTSIZE = 10, MAXWEIGHTS= 4, MAXRESULTS= 10;
-    reg [INPUTSIZE*32-1:0] imagedata;
-    reg [32*NR_LAYERS-1:0] neuroncount = {32'd10,32'd3};                                
-    wire [32*OUTPUTSIZE-1:0] result;
+module NeuralNetworkTB;
+    parameter NR_LAYERS = 2, INPUTSIZE = 4, OUTPUTSIZE = 10, MAX_IN = 4, MAX_OUT = 10;
+    reg [INPUTSIZE * 32 - 1:0] imagedata;
+    reg [32 * NR_LAYERS - 1:0] neuron_count = {32'd10, 32'd3};
+    wire [32 * OUTPUTSIZE - 1:0] result;
 
     reg clk = 0;
     always begin
@@ -14,26 +14,27 @@ module NeuralNetworkNewTB;
        #1;
     end
 
-    NeuralNetworkNew #(.NR_LAYERS(NR_LAYERS),
-                    .INPUTSIZE(INPUTSIZE),
-                    .OUTPUTSIZE(OUTPUTSIZE),
-                    .MAXWEIGHTS(MAXWEIGHTS),
-                    .MAXRESULTS(MAXRESULTS)) 
+    NeuralNetwork #(.NR_LAYERS(2),
+                    .IN_SIZE(4),
+                    .OUT_SIZE(10),
+                    .MAX_IN(4),
+                    .MAX_OUT(10))
                     NN1 (
                         .inputdata(imagedata),
-                        .neuron_count(neuroncount),
+                        .neuron_count(neuron_count),
                         .clk(clk),
                         .result(result));
 
     initial
     begin
-        $dumpfile("NeuralNetworkNewTB.vcd");
-        $dumpvars(0,NeuralNetworkNewTB);
+        $dumpfile("vcd/NeuralNetworkTB.vcd");
+        $dumpvars(0, NeuralNetworkTB);
 
-        imagedata = {32'h41200000,32'h41200000,32'h41200000,32'h41200000};
-        
+        //          1.25 * 2 ** 3 = 10
+        imagedata = {32'h41200000, 32'h41200000, 32'h41200000, 32'h41200000};
+
         #1000;
         $finish;
     end
-    
+
 endmodule
