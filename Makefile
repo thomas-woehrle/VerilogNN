@@ -6,7 +6,7 @@ all: $(VVP_FILES)
 
 .PHONY: clean
 clean:
-	rm run/* vcd/*
+	-rm run/* vcd/*
 
 # @ echo "The pattern target is \"$@\""
 # @ echo "The FIRST prerequisite is \"$<\""
@@ -23,7 +23,7 @@ run/%.vvp: sim/%.v run vcd
 # 	@ echo "Ingoring $<, takes too long"
 
 run:
-	mkdir run
+	-mkdir run
 
 vcd:
-	mkdir vcd
+	-mkdir vcd
