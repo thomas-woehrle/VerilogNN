@@ -1,6 +1,5 @@
 *.vvp
 *.vcd
 a.out
-data/
 
 *.sh
