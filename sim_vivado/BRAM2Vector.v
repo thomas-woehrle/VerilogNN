@@ -44,7 +44,7 @@ module BRAM2Vector #(VLEN = 1)
         .enb   (bram_portb_0_en),
         .web   (1'b0),  // writing disabled
         .addrb (bram_portb_0_addr[10:0]),  // bottom 11 bits used for addressing
-        .dinb  (),
+        .dinb  (32'b0),  // dummy input (ignored)
         .doutb (bram_portb_0_dout)
     );
 
