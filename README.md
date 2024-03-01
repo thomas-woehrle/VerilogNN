@@ -39,9 +39,11 @@ In addition, following directories are created when running the `make` command:
 - `run/`... Simulation files created by `iverilog` from simulation testbenches. These files are runnable by `vvp` simulator (part of iverilog package).
 - `vcd/`... VCD waveform files, openable for example in GTKWave. Constructed whenever the files in `run/` are launched.
 
-# Technical information
+Keep in mind that the Makefile does not contain any information about dependencies between the source files. This problem is especially notable when a module in `src/` is changed and we wish to compile its unmodified testbench in `sim/`. Although this solution is not ideal, a quick workaround can be achieved with the following command:
 
-How to run this project, ...
+```
+make --always-make [target]
+```
 
 ## Recommended tools
 
@@ -49,5 +51,6 @@ Basic simulation of the Verilog code can be done using **Icarus Verilog** (`iver
 serves just for this purpose - it automatically "compiles" provided testbenches into `vvp` files, which are then silently run in order
 to produce `vcd` (Value Change Dump) waveform files. These files are then inspectable using **GTKWave** graphical utility.
 
-Alternatively, this entire toolchain is replacable with **AMD Vivado**, needed for generating the bitstream that is uploaded to the real
-FPGA board. However, for basic testing this might get unnecessarily complex, as Vivado can get painstakingly slow.
+When using these modules for real HW deployment on an FPGA, **AMD Vivado** is essentially unavoidable for generating the bitstream that is uploaded to the real FPGA board. However, for basic testing this might get unnecessarily complex, as Vivado can get painstakingly slow.
+
+For more information on how to use these tools, see the documentation within the [main repository](https://github.com/ruzicka02/NN.FPGA).
