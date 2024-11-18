@@ -1,3 +1,4 @@
+import math
 import os
 from pathlib import Path
 
@@ -19,13 +20,23 @@ def ieee754_to_float(value):
     return struct.unpack('>f', struct.pack('>I', value))[0]
 
 
+def get_tolerance(value):
+    """Calculate the tolerance for a value, considering that 6 digits can be represented precisely"""
+    if value == 0:
+        n_digits = 1
+    else:
+        n_digits = math.floor(math.log10(abs(value))) + 1
+
+    return 10 ** (-6 + n_digits)
+
+
 def assert_convertability(x):
-    tolerance = 1e-1
+    tolerance = get_tolerance(x)
     assert abs(x - ieee754_to_float(float_to_ieee754(x))
                ) < tolerance, f"Value {x} not convertible"
 
 
-async def run_test(dut, a, b, tolerance=1e-3):
+async def run_test(dut, a, b):
     assert_convertability(a)
     assert_convertability(b)
 
@@ -36,6 +47,7 @@ async def run_test(dut, a, b, tolerance=1e-3):
 
     result = ieee754_to_float(dut.result.value)
     expected = a + b
+    tolerance = max(get_tolerance(a), get_tolerance(b))
 
     assert abs(result - expected) < tolerance, \
         f"Mismatch: {a} + {b} = {result} (expected {expected})"
@@ -56,7 +68,7 @@ async def test_random_add(dut):
         a = random.uniform(-100, 100)
         b = random.uniform(-100, 100)
 
-        await run_test(dut, a, b, tolerance=1e-3)
+        await run_test(dut, a, b)
 
 
 def test_runner():
