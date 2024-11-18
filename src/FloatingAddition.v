@@ -2,10 +2,10 @@
 
 `timescale 1ns / 1ps
 
-`ifndef _floating_addition
-`define _floating_addition
+// `ifndef _floating_addition
+// `define _floating_addition
 
-`include "FloatingCompare.v"
+// `include "FloatingCompare.v"
 
 module FloatingAddition (
     input [31:0] A,
@@ -70,4 +70,4 @@ module FloatingAddition (
     result = {A_sign, result_Exponent, result_Mantissa[22:0]};
   end
 endmodule
-`endif  // _floating_addition
+// `endif  // _floating_addition
