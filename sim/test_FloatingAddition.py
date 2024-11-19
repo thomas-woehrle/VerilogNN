@@ -54,14 +54,16 @@ async def run_test(dut, a, b):
 
 
 @cocotb.test()
-async def test_simple_add(dut):
-    a = 1.0
-    b = 1.0
-    await run_test(dut, a, b)
+async def test_add_basic(dut):
+    await run_test(dut, 0.0, 0.0)
+    await run_test(dut, 1.0, 1.0)
+    await run_test(dut, -1.0, -1.0)
+    await run_test(dut, 1.0, -1.0)
+    await run_test(dut, -1.0, 1.0)
 
 
 @cocotb.test()
-async def test_random_add(dut):
+async def test_random_add_simple(dut):
     """Test floating point addition with random values"""
     for _ in range(100):
         # Generate random float values
@@ -71,13 +73,25 @@ async def test_random_add(dut):
         await run_test(dut, a, b)
 
 
+@cocotb.test()
+async def test_random_add_full_range(dut):
+    """Test floating point addition with random values"""
+    for _ in range(1000):
+        # Generate random float values
+        # 3.4028235e38 is the highest value in ieee754 single precision float.
+        # So 1.7e38 has to be handleable for sure
+        a = random.uniform(-1.7e38, 1.7e38)
+        b = random.uniform(-1.7e38, 1.7e38)
+
+        await run_test(dut, a, b)
+
+
 def test_runner():
     sim = os.getenv("SIM", "icarus")
 
     proj_path = Path(__file__).resolve().parent.parent / "src"
 
-    # proj_path/"FloatingCompare.v"] don't know why this is not needed in the sources
-    sources = [proj_path/"FloatingAddition.v", ]
+    sources = [proj_path/"FloatingAddition.v", proj_path/"FloatingCompare.v"]
 
     runner = get_runner(sim)
     runner.build(
