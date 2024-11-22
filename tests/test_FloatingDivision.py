@@ -47,25 +47,3 @@ async def test_random_division_full_range(dut):
     max_val = utils.IEEE754_MAX_VAL / 10
     for _ in range(1000):
         await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
-
-
-def test_runner():
-    sim = os.getenv("SIM", "icarus")
-
-    proj_path = Path(__file__).resolve().parent.parent / "src"
-
-    sources = [proj_path/"FloatingDivision.v", proj_path /
-               "FloatingMultiplication.v", proj_path/"FloatingAddition.v", proj_path/"FloatingCompare.v"]
-
-    runner = get_runner(sim)
-    runner.build(
-        sources=sources,
-        hdl_toplevel="FloatingDivision",
-    )
-
-    runner.test(hdl_toplevel="FloatingDivision",
-                test_module="test_FloatingDivision")
-
-
-if __name__ == "__main__":
-    test_runner()

@@ -45,24 +45,3 @@ async def test_random_multiplication_full_range(dut):
     max_val = math.sqrt(utils.IEEE754_MAX_VAL)
     for _ in range(1000):
         await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
-
-
-def test_runner():
-    sim = os.getenv("SIM", "icarus")
-
-    proj_path = Path(__file__).resolve().parent.parent / "src"
-
-    sources = [proj_path/"FloatingMultiplication.v"]
-
-    runner = get_runner(sim)
-    runner.build(
-        sources=sources,
-        hdl_toplevel="FloatingMultiplication",
-    )
-
-    runner.test(hdl_toplevel="FloatingMultiplication",
-                test_module="test_FloatingMultiplication")
-
-
-if __name__ == "__main__":
-    test_runner()

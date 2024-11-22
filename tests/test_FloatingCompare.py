@@ -41,24 +41,3 @@ async def test_random_compare_full_range(dut):
     max_val = utils.IEEE754_MAX_VAL
     for _ in range(1000):
         await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
-
-
-def test_runner():
-    sim = os.getenv("SIM", "icarus")
-
-    proj_path = Path(__file__).resolve().parent.parent / "src"
-
-    sources = [proj_path/"FloatingCompare.v"]
-
-    runner = get_runner(sim)
-    runner.build(
-        sources=sources,
-        hdl_toplevel="FloatingCompare",
-    )
-
-    runner.test(hdl_toplevel="FloatingCompare",
-                test_module="test_FloatingCompare")
-
-
-if __name__ == "__main__":
-    test_runner()

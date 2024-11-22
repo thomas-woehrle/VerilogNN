@@ -1,0 +1,7 @@
+FloatingAddition:
+  - FloatingCompare
+FloatingCompare: []
+FloatingDivision:
+  - FloatingAddition
+  - FloatingMultiplication
+FloatingMultiplication: []
