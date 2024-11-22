@@ -5,52 +5,22 @@ from pathlib import Path
 import cocotb
 from cocotb.runner import get_runner
 from cocotb.triggers import Timer
-import struct
-import random
 
-
-IEEE754_MAX_VAL = 3.4028235e38
-
-
-def float_to_ieee754(value: float) -> int:
-    """Convert a float to its IEEE 754 single-precision binary representation as an Integer"""
-    return struct.unpack('>I', struct.pack('>f', value))[0]
-
-
-def ieee754_to_float(value):
-    """Convert IEEE-754 binary back to float"""
-    # Convert BinaryValue to integer
-    return struct.unpack('>f', struct.pack('>I', value))[0]
-
-
-def get_tolerance(value):
-    """Calculate the tolerance for a value, considering that 6 digits can be represented precisely"""
-    if value == 0:
-        n_digits = 1
-    else:
-        n_digits = math.floor(math.log10(abs(value))) + 1
-
-    return 10 ** (-6 + n_digits)
-
-
-def assert_convertability(x):
-    tolerance = get_tolerance(x)
-    assert abs(x - ieee754_to_float(float_to_ieee754(x))
-               ) < tolerance, f"Value {x} not convertible"
+import utils
 
 
 async def run_test(dut, a, b):
-    assert_convertability(a)
-    assert_convertability(b)
+    utils.assert_convertibility(a)
+    utils.assert_convertibility(b)
 
-    dut.A.value = float_to_ieee754(a)
-    dut.B.value = float_to_ieee754(b)
+    dut.A.value = utils.float_to_ieee754(a)
+    dut.B.value = utils.float_to_ieee754(b)
 
     await Timer(1)
 
-    result = ieee754_to_float(dut.result.value)
+    result = utils.ieee754_to_float(dut.result.value)
     expected = a * b
-    tolerance = get_tolerance(a * b)
+    tolerance = utils.get_tolerance(a * b)
 
     assert abs(result - expected) < tolerance, \
         f"Mismatch: {a} * {b} = {result} (expected {expected})"
@@ -58,35 +28,23 @@ async def run_test(dut, a, b):
 
 @cocotb.test()
 async def test_multiplication_basic(dut):
-    await run_test(dut, 0.0, 0.0)
-    await run_test(dut, 1.0, 1.0)
-    await run_test(dut, -1.0, -1.0)
-    await run_test(dut, 1.0, -1.0)
-    await run_test(dut, -1.0, 1.0)
-    await run_test(dut, 0.5, 0.5)
+    utils.pairwise_run_fct(dut, [-1.0, -0.5, 0.0, 0.5, 1.0], run_test)
 
 
 @cocotb.test()
 async def test_random_multiplication_simple(dut):
-    """Test floating point multiplication with simple random values"""
-    for _ in range(100):
-        # Generate random float values
-        a = random.uniform(-100, 100)
-        b = random.uniform(-100, 100)
-
-        await run_test(dut, a, b)
+    """Test floating point addition with basic random values"""
+    max_val = 100
+    for _ in range(1000):
+        await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
 
 
 @cocotb.test()
-async def test_random_add_full_range(dut):
-    """Test floating point multiplication with random values from the full range"""
-    max_safe_val = math.sqrt(IEEE754_MAX_VAL)
+async def test_random_multiplication_full_range(dut):
+    """Test floating point addition with random values from the full range"""
+    max_val = math.sqrt(utils.IEEE754_MAX_VAL)
     for _ in range(1000):
-        # Generate random float values
-        a = random.uniform(-max_safe_val, max_safe_val)
-        b = random.uniform(-max_safe_val, max_safe_val)
-
-        await run_test(dut, a, b)
+        await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
 
 
 def test_runner():

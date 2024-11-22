@@ -35,7 +35,7 @@ def assert_convertibility(x):
 
 
 async def sample_and_run_fct(dut, min_val, max_val, fct):
-    """Sample 2 numbers from min_val and max_val and run fct with them.
+    """Sample 2 numbers between min_val and max_val and run fct with them.
 
     Args:
         dut: The device under test.
