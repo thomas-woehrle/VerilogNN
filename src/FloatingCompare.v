@@ -11,8 +11,11 @@ module FloatingCompare (
 );
 
   always @(*) begin
+    // Handle equality case first
+    if (A == B) result = 1'b1;  // A >= B is true when A equals B
+
     // compare signs
-    if (A[31] != B[31]) result = ~A[31];  // A is positive (0) -> A >= B -> result = 1
+    else if (A[31] != B[31]) result = ~A[31];  // A is positive (0) -> A >= B -> result = 1
 
     // compare exponents
     else begin
