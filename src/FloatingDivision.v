@@ -16,11 +16,11 @@
 
 `timescale 1ns / 1ps
 
-`ifndef _floating_division
-`define _floating_division
+// `ifndef _floating_division
+// `define _floating_division
 
-`include "FloatingMultiplication.v"
-`include "FloatingAddition.v"
+// `include "FloatingMultiplication.v"
+//`include "FloatingAddition.v"
 
 // Uses Newton Raphson Iterations to find the reciprocal of the Divisor and then Multiplies the Reciprocal with the Dividend.
 module FloatingDivision (
@@ -115,4 +115,4 @@ module FloatingDivision (
 
   assign result = ((A[30:23] == 0) || zero_division) ? 32'h0000_0000 : result_unprotected;
 endmodule
-`endif  // _floating_division
+// `endif  // _floating_division

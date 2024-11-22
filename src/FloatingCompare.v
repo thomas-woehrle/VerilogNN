@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
-`ifndef _floating_compare
-`define _floating_compare
+// `ifndef _floating_compare
+// `define _floating_compare
 
 // returns A >= B via the output register
 module FloatingCompare (
@@ -33,4 +33,4 @@ module FloatingCompare (
   end
 
 endmodule
-`endif  //_floating_compare
+// `endif  //_floating_compare
