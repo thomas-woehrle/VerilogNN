@@ -1,43 +1,48 @@
-import os
-from pathlib import Path
-
 import cocotb
-from cocotb.runner import get_runner
-from cocotb.triggers import Timer
 
+import test_types
 import utils
 
 
-async def run_test(dut, a, b):
-    utils.assert_convertibility(a)
-    utils.assert_convertibility(b)
+class FloatingCompareTest(test_types.FloatingPointBaseTest):
+    def assign_output(self):
+        self.result = self.dut.result.value
 
-    dut.A.value = utils.float_to_ieee754(a)
-    dut.B.value = utils.float_to_ieee754(b)
+    def assert_result(self):
+        expected = 1 if self.A >= self.B else 0
 
-    await Timer(1)
-
-    result = dut.result.value
-    expected = 1 if a >= b else 0
-
-    assert result == expected, \
-        f"Mismatch: {a} >= {b} = {result} (expected {expected})"
+        assert self.result == expected, \
+            f"Mismatch: {self.A} >= {self.B} = {
+                self.result} (expected {expected})"
 
 
 @cocotb.test()
-async def test_compare_basic(dut):
-    utils.pairwise_run_fct(dut, [-1.0, -0.5, 0.0, 0.5, 1.0], run_test)
+async def test_floating_compare_basic(dut):
+    test = FloatingCompareTest(dut, None, None)
+    for a in utils.BASIC_VALUES:
+        for b in utils.BASIC_VALUES:
+            test.A = a
+            test.B = b
+            await test.exec_test()
 
 
 @cocotb.test()
-async def test_random_compare_simple(dut):
+async def test_floating_compare_random_simple(dut):
+    test = FloatingCompareTest(dut, None, None)
     max_val = 100
     for _ in range(1000):
-        await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
+        a, b = utils.sample_a_and_b(-max_val, max_val)
+        test.A = a
+        test.B = b
+        await test.exec_test()
 
 
 @cocotb.test()
-async def test_random_compare_full_range(dut):
+async def test_floating_compare_random_full_range(dut):
+    test = FloatingCompareTest(dut, None, None)
     max_val = utils.IEEE754_MAX_VAL
     for _ in range(1000):
-        await utils.sample_and_run_fct(dut, -max_val, max_val, run_test)
+        a, b = utils.sample_a_and_b(-max_val, max_val)
+        test.A = a
+        test.B = b
+        await test.exec_test()
