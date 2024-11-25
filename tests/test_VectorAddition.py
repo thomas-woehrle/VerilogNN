@@ -1,22 +1,14 @@
 import cocotb
 import numpy as np
 
-import utils
+import assertions
 import test_types
-
-
-def assert_addition(a, b, result):
-    expected = a + b
-    tolerance = max(utils.get_tolerance(a), utils.get_tolerance(b))
-
-    assert abs(result - expected) < tolerance, \
-        f"Mismatch: {a} + {b} = {result} (expected {expected})"
 
 
 class VectorAdditionTest(test_types.VectorBaseTest):
     def assert_result(self):
         for i in range(len(self.result)):
-            assert_addition(self.A[i], self.B[i], self.result[i])
+            assertions.assert_addition(self.A[i], self.B[i], self.result[i])
 
 
 @cocotb.test()

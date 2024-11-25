@@ -6,6 +6,7 @@ import numpy as np
 
 
 IEEE754_MAX_VAL = 3.4028235e38
+BASIC_VALUES = [-1.0, -0.5, 0.0, 0.5, 1.0]
 
 
 def float_to_ieee754(value: float) -> int:
@@ -49,6 +50,12 @@ async def sample_and_run_fct(dut, min_val, max_val, fct):
     b = random.uniform(min_val, max_val)
 
     await fct(dut, a, b)
+
+
+def sample_a_and_b(min_val, max_val):
+    a = random.uniform(min_val, max_val)
+    b = random.uniform(min_val, max_val)
+    return a, b
 
 
 async def pairwise_run_fct(dut, vals, fct):
