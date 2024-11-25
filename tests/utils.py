@@ -2,6 +2,8 @@ import math
 import random
 import struct
 
+import numpy as np
+
 
 IEEE754_MAX_VAL = 3.4028235e38
 
@@ -60,3 +62,27 @@ async def pairwise_run_fct(dut, vals, fct):
     for val_1 in vals:
         for val_2 in vals:
             await fct(dut, val_1, val_2)
+
+
+# TODO docstrings for the following functions
+def array_to_ieee754_array(array):
+    """Generate vector from the given array. Assumes 1-dimensional array."""
+    return [float_to_ieee754(x) for x in array]
+
+
+def ieee754_array_to_array(ieee754_array):
+    return np.array([ieee754_to_float(x) for x in ieee754_array])
+
+
+def pack_ieee754_array(ieee754_array):
+    """Pack list of 32-bit values into single value, which can be assigned to a wire"""
+    result = 0
+    for i, val in enumerate(ieee754_array):
+        result |= (val << (32 * i))
+    return result
+
+
+def unpack_ieee754_array(packed_ieee754_array, width):
+    """Unpack single value into list of 32-bit values"""
+    mask = (1 << 32) - 1
+    return [(packed_ieee754_array >> (32 * i)) & mask for i in range(width)]
