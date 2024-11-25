@@ -11,7 +11,7 @@ class FloatingAdditionTest(test_types.FloatingPointBaseTest):
 
 
 @cocotb.test()
-async def test_add_basic(dut):
+async def test_floating_addition_basic(dut):
     test = FloatingAdditionTest(dut, None, None)
     for a in utils.BASIC_VALUES:
         for b in utils.BASIC_VALUES:
@@ -21,7 +21,7 @@ async def test_add_basic(dut):
 
 
 @cocotb.test()
-async def test_random_add_simple(dut):
+async def test_floating_addition_random_simple(dut):
     test = FloatingAdditionTest(dut, None, None)
     max_val = 100
     for _ in range(1000):
@@ -32,7 +32,7 @@ async def test_random_add_simple(dut):
 
 
 @cocotb.test()
-async def test_random_add_full_range(dut):
+async def test_floating_addition_random_full_range(dut):
     test = FloatingAdditionTest(dut, None, None)
     max_val = utils.IEEE754_MAX_VAL / 2
     for _ in range(1000):
