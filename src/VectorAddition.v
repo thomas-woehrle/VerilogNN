@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
 
-`ifndef _vector_addition
-`define _vector_addition
+// `ifndef _vector_addition
+// `define _vector_addition
 
-`include "FloatingAddition.v"
+// `include "FloatingAddition.v"
 
 // add two vectors of same length VLEN element-wise
 module VectorAddition #(
-    parameter VLEN = 1
+    parameter VLEN = 3
 ) (
     input  [(32 * VLEN) - 1:0] A,
     input  [(32 * VLEN) - 1:0] B,
@@ -25,4 +25,4 @@ module VectorAddition #(
     );  // element-wise addition
   end
 endmodule
-`endif  // _vector_addition
+// `endif  // _vector_addition

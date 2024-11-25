@@ -5,3 +5,5 @@ FloatingDivision:
   - FloatingAddition
   - FloatingMultiplication
 FloatingMultiplication: []
+VectorAddition:
+  - FloatingAddition
