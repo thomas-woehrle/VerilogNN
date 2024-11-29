@@ -1,7 +1,11 @@
+import random
+
 import cocotb
+import numpy as np
 from cocotb.clock import Clock
 from cocotb.triggers import Timer
 
+import utils
 import test_VectorAddition
 
 
@@ -9,7 +13,7 @@ class VectorAdditionFlexTest(test_VectorAddition.VectorAdditionTest):
     def __init__(self, dut, A: list[float], B: list[float]):
         super().__init__(dut, A, B)
         self.clk = Clock(self.dut.clk, 1, units="ns")
-        assert len(A), len(B)
+        assert len(A) == len(B)
         self.l = len(A)
 
     def assign_input(self):
@@ -36,5 +40,33 @@ class VectorAdditionFlexTest(test_VectorAddition.VectorAdditionTest):
 
 @cocotb.test()
 async def test_vector_addition_flex_basic(dut):
-    test = VectorAdditionFlexTest(dut, [1.0], [1.0])
-    await test.exec_test()
+    a = np.array([1, 2, 3])
+    b = np.array([2, 3, 4])
+
+    await VectorAdditionFlexTest(dut, a, b).exec_test()
+
+
+@cocotb.test()
+async def test_vector_addition_flex_random_simple(dut):
+    test = VectorAdditionFlexTest(dut, [], [])
+    max_val = 100
+
+    for i in range(1000):
+        # 128 is the maximum width addable by VectorAdditionFlex, as of writing the test
+        length = random.randint(0, 128)
+        test.A = utils.sample_array(-max_val, max_val, length)
+        test.B = utils.sample_array(-max_val, max_val, length)
+        await test.exec_test()
+
+
+@cocotb.test()
+async def test_vector_addition_flex_random_full_range(dut):
+    test = VectorAdditionFlexTest(dut, [], [])
+    max_val = utils.IEEE754_MAX_VAL / 2
+
+    for i in range(1000):
+        # see comment above regarding why 128
+        length = random.randint(1, 128)
+        test.A = utils.sample_array(-max_val, max_val, length)
+        test.B = utils.sample_array(-max_val, max_val, length)
+        await test.exec_test()
