@@ -58,6 +58,14 @@ def sample_a_and_b(min_val, max_val):
     return a, b
 
 
+def sample_array(min_val, max_val, width):
+    arr = []
+    for _ in range(width):
+        arr.append(random.uniform(min_val, max_val))
+
+    return np.array(arr)
+
+
 async def pairwise_run_fct(dut, vals, fct):
     """Runs the passed fct for each pair of values in vals.
 
