@@ -59,7 +59,7 @@ class VectorBaseTest(BaseTest):
         self.dut.B.value = utils.pack_ieee754_array(
             utils.array_to_ieee754_array(self.B))
 
-    def assign_output(self):
+    def assign_output(self, width=3):
         # TODO dynamic width
-        temp = utils.unpack_ieee754_array(self.dut.result.value, 3)
+        temp = utils.unpack_ieee754_array(self.dut.result.value, width)
         self.result = utils.ieee754_array_to_array(temp)

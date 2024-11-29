@@ -7,3 +7,5 @@ FloatingDivision:
 FloatingMultiplication: []
 VectorAddition:
   - FloatingAddition
+VectorAdditionFlex:
+  - FloatingAddition
