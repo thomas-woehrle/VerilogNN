@@ -12,3 +12,6 @@ VectorAdditionFlex:
 VectorMultiplicationPar:
   - FloatingAddition
   - FloatingMultiplication
+VectorMultiplicationFlex:
+  - FloatingAddition
+  - FloatingMultiplication

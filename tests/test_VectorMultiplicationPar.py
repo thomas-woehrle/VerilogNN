@@ -17,7 +17,7 @@ class VectorMultiplicationParTest(test_types.VectorBaseTest):
             f"Mismatch: {
                 self.A} @ {self.B} = {self.result} (expected: {expected}; tolerance: {tolerance})"
 
-    def assign_output(self, width=3):
+    def assign_output(self):
         self.result = utils.ieee754_to_float(self.dut.result.value)
 
 

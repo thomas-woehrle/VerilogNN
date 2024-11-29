@@ -10,7 +10,7 @@ import test_VectorAddition
 
 
 class VectorAdditionFlexTest(test_VectorAddition.VectorAdditionTest):
-    def __init__(self, dut, A: list[float], B: list[float]):
+    def __init__(self, dut, A, B):
         super().__init__(dut, A, B)
         self.clk = Clock(self.dut.clk, 1, units="ns")
         assert len(A) == len(B)

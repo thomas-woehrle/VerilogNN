@@ -3,8 +3,8 @@
 `ifndef _vector_multiplication_flex
 `define _vector_multiplication_flex
 
-`include "FloatingMultiplication.v"
-`include "FloatingAddition.v"
+// `include "FloatingMultiplication.v"
+// `include "FloatingAddition.v"
 
 // also known as dot product. Sequentialized into MOD_COUNT multipliers and adders.
 // The vector length can be changed in runtime (is passed on a wire as 32bit unsigned integer).
