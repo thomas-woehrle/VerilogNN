@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+import numpy as np
 from cocotb.triggers import Timer
 
 import utils
@@ -49,8 +50,8 @@ class FloatingPointBaseTest(BaseTest):
 class VectorBaseTest(BaseTest):
     def __init__(self, dut, A, B):
         self.dut = dut
-        self.A = A
-        self.B = B
+        self.A = np.array(A)
+        self.B = np.array(B)
         self.result = None
 
     def assign_input(self):

@@ -3,12 +3,12 @@
 `ifndef _vector_multiplication_par
 `define _vector_multiplication_par
 
-`include "FloatingMultiplication.v"
-`include "FloatingAddition.v"
+// `include "FloatingMultiplication.v"
+// `include "FloatingAddition.v"
 
 // also known as dot product
 module VectorMultiplicationPar #(
-    parameter VLEN = 1
+    parameter VLEN = 3
 ) (
     input [(32 * VLEN) - 1:0] A,
     input [(32 * VLEN) - 1:0] B,

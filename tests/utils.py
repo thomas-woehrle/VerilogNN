@@ -30,6 +30,19 @@ def get_tolerance(value):
     return 10 ** (-6 + n_digits)
 
 
+def get_dot_product_tolerance(a, b):
+    """Calculate the tolerance for a dot product a @ b"""
+    vectorized_get_tolerance = np.vectorize(get_tolerance)
+    return max(
+        # max tolerance for any value in a * b
+        max(vectorized_get_tolerance(a * b)),
+        # max tolerance for any value in a
+        max(vectorized_get_tolerance(a)),
+        # max tolerance for any value in b
+        max(vectorized_get_tolerance(b))
+    )
+
+
 def assert_convertibility(x):
     """Asserts whether x is convertible to IEEE-754."""
     tolerance = get_tolerance(x)
