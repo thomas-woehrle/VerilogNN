@@ -28,3 +28,13 @@ def assert_divsion(a, b, result):
     assert abs(result - expected) < tolerance, \
         f"Mismatch: {
             a} / {b} = {result} (expected {expected}, tolerance: {tolerance})"
+
+
+def assert_vector_multiplication(a, b, result):
+    expected = a @ b
+    # not sure about this
+    tolerance = utils.get_dot_product_tolerance(a, b)
+
+    assert abs(result - expected) < tolerance, \
+        f"Mismatch: {
+            a} @ {b} = {result} (expected: {expected}; tolerance: {tolerance})"

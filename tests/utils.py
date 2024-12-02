@@ -116,3 +116,15 @@ def unpack_ieee754_array(packed_ieee754_array, width):
     """Unpack single value into list of 32-bit values"""
     mask = (1 << 32) - 1
     return [(packed_ieee754_array >> (32 * i)) & mask for i in range(width)]
+
+
+def array_to_packed_integer(array):
+    """Turn an array into the integer representing it in IEEE754.
+    array is assumed to be 1-dimensional.
+    """
+    return pack_ieee754_array(array_to_ieee754_array(array))
+
+
+def packed_integer_to_array(integer, width):
+    """Turn a single integer as received from dut.result into an array with a certain width"""
+    return ieee754_array_to_array(unpack_ieee754_array(integer, width))

@@ -5,6 +5,8 @@ FloatingDivision:
   - FloatingAddition
   - FloatingMultiplication
 FloatingMultiplication: []
+MatrixMultiplicationFlex:
+  - VectorMultiplicationFlex
 VectorAddition:
   - FloatingAddition
 VectorAdditionFlex:
