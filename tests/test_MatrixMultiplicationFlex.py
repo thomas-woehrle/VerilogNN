@@ -1,3 +1,4 @@
+import math
 import random
 
 import cocotb
@@ -58,7 +59,7 @@ class MatrixMultiplicationFlexTest(test_types.BaseTest):
         await cocotb.start(self.clk.start())
 
         while not self.dut.done.value:
-            await Timer(1)
+            await Timer(1, "ns")
 
         self.assign_output()
         self.assert_result()
@@ -78,15 +79,15 @@ async def test_matrix_multiplication_flex_basic(dut):
 
 
 @cocotb.test()
-async def test_matrix_multiplication_flex_random_simple(dut):
+async def test_matrix_multiplication_flex_random(dut):
     test = MatrixMultiplicationFlexTest(dut, np.array([]), np.array([]))
+    max_val = math.sqrt(utils.IEEE754_MAX_VAL) / 10
 
     for _ in range(100):
-        print(_)
         l = random.randint(1, 3)
         m = random.randint(1, 3)
-        a = np.random.uniform(-100, 100, size=(l, m))
-        b = np.random.uniform(-100, 100, size=(m, 1))
+        a = np.random.uniform(-max_val, max_val, size=(l, m))
+        b = np.random.uniform(-max_val, max_val, size=(m, 1))
         test.A = a
         test.B_T = b.transpose()
         await test.exec_test()

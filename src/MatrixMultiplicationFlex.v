@@ -67,6 +67,11 @@ module MatrixMultiplicationFlex #(
     n_copy <= n;
   end
 
+  // done signal should be changed right away
+  always @(A, B_T, l, m, n) begin
+    done = 1'b0;
+  end
+
   // once output is complete, change the inputs for vector_mult
   always @(posedge clk) begin
 
