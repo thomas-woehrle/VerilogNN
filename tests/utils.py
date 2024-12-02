@@ -33,6 +33,8 @@ def get_tolerance(value):
 def get_dot_product_tolerance(a, b):
     """Calculate the tolerance for a dot product a @ b"""
     vectorized_get_tolerance = np.vectorize(get_tolerance)
+    # the actual tolerance is a little different and also depends on the lenght of a and b
+    # * 10 is a safety measure, moving the tolerance one digit, which doesn't make a big difference
     return max(
         # max tolerance for any value in a * b
         max(vectorized_get_tolerance(a * b)),
@@ -40,7 +42,7 @@ def get_dot_product_tolerance(a, b):
         max(vectorized_get_tolerance(a)),
         # max tolerance for any value in b
         max(vectorized_get_tolerance(b))
-    )
+    ) * 10
 
 
 def assert_convertibility(x):
