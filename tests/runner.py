@@ -27,6 +27,13 @@ def run():
     project_path = sys.argv[1]
     module_name = sys.argv[2]
 
+    # Allows for passing parameters as name=value, fe LBUF=128
+    params = {}
+    for i in range(3, len(sys.argv)):
+        param = sys.argv[i]
+        key, value = param.split("=")
+        params[key] = value
+
     dep_file_path = os.path.join(project_path, "tests", "dependencies.yaml")
     src_path = os.path.join(project_path, "src")
 
@@ -38,7 +45,8 @@ def run():
     runner.build(
         sources=sources,
         hdl_toplevel=module_name,
-        clean=True
+        clean=True,
+        parameters=params
     )
 
     runner.test(hdl_toplevel=module_name,
