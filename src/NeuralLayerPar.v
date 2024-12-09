@@ -3,13 +3,13 @@
 `ifndef _neural_layer_par
 `define _neural_layer_par
 
-`include "MatrixMultiplicationPar.v"
-`include "VectorAddition.v"
-`include "ReLU.v"
-`include "Sigmoid.v"
-`include "Softmax.v"
-`include "HyperbolicTangent.v"
-`include "Softplus.v"
+// `include "MatrixMultiplicationPar.v"
+// `include "VectorAddition.v"
+// `include "ReLU.v"
+// `include "Sigmoid.v"
+// `include "Softmax.v"
+// `include "HyperbolicTangent.v"
+// `include "Softplus.v"
 
 // Neural layer performing all computations in parallel. After matrix multiplication, one of the many activation
 // functions is applied - this is determined in compile time.

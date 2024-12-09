@@ -19,11 +19,21 @@ LogarithmApprox:
   - FloatingMultiplication
 MatrixMultiplicationFlex:
   - VectorMultiplicationFlex
+MatrixMultiplicationPar:
+  - VectorMultiplicationPar
 MatrixMultiplicationSeq:
   - VectorMultiplicationSeq
   - VectorMultiplicationPar
 MnistMinimalNN:
   - NeuralLayerSeq
+NeuralLayerPar:
+  - HyperbolicTangent
+  - MatrixMultiplicationPar
+  - ReLU
+  - Sigmoid
+  - Softmax
+  - Softplus
+  - VectorAddition
 NeuralLayerSeq:
   - HyperbolicTangent
   - MatrixMultiplicationSeq

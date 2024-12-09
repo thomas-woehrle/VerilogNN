@@ -2,7 +2,6 @@ import os
 
 import cocotb
 import numpy as np
-from cocotb.triggers import Timer
 from cocotb.clock import Clock
 
 import test_MatrixMultiplicationFlex
