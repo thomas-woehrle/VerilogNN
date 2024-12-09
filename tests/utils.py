@@ -30,6 +30,10 @@ def get_tolerance(value):
     return 10 ** (-6 + n_digits)
 
 
+def get_tolerances_for_array(array: np.ndarray) -> np.ndarray:
+    return np.vectorize(get_tolerance)(array)
+
+
 def get_dot_product_tolerance(a, b):
     """Calculate the tolerance for a dot product a @ b"""
     vectorized_get_tolerance = np.vectorize(get_tolerance)
@@ -115,10 +119,6 @@ def pack_ieee754_array(ieee754_array):
 def unpack_ieee754_array(packed_ieee754_array, width):
     """Unpack single value into list of 32-bit values"""
     mask = (1 << 32) - 1
-    return_array = []
-    for i in range(width):
-        print(i)
-        return_array.append((packed_ieee754_array >> (32 * i)) & mask)
     return [(packed_ieee754_array >> (32 * i)) & mask for i in range(width)]
 
 
