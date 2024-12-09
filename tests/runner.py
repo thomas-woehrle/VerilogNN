@@ -14,6 +14,9 @@ def get_all_dependencies(yaml_file_path, module_name):
     def add_dependencies(dependency_info, module_name, existing):
         existing.add(module_name)
         dependencies = dependency_info.get(module_name)
+        if dependencies is None:
+            raise ValueError(
+                f"No dependencies specified for module {module_name}.")
         for d in dependencies:
             add_dependencies(dependency_info, d, existing)
 
@@ -40,6 +43,7 @@ def run():
     dependencies = get_all_dependencies(dep_file_path, module_name)
 
     sources = [os.path.join(src_path, dep + ".v") for dep in dependencies]
+    print(sources)
 
     runner = get_runner("icarus")
     runner.build(
