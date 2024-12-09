@@ -43,7 +43,6 @@ def run():
     dependencies = get_all_dependencies(dep_file_path, module_name)
 
     sources = [os.path.join(src_path, dep + ".v") for dep in dependencies]
-    print(sources)
 
     runner = get_runner("icarus")
     runner.build(
