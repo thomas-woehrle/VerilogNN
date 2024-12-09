@@ -54,7 +54,8 @@ def run():
     )
 
     runner.test(hdl_toplevel=module_name,
-                test_module=f"test_{module_name}")
+                test_module=f"test_{module_name}",
+                extra_env=params)
 
 
 if __name__ == '__main__':

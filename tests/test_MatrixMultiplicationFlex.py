@@ -25,7 +25,8 @@ class MatrixMultiplicationFlexTest(test_types.BaseTest):
         self.result = None
 
     def assign_input(self):
-        assert len(self.A.shape) == len(self.B_T.shape) == 2
+        assert len(self.A.shape) == len(self.B_T.shape) == 2, f"len(self.A.shape): {
+            self.A.shape}, len(self.B.shape): {self.B_T.shape}"
         assert self.A.shape[1] == self.B_T.shape[1]
         self.dut.A.value = utils.array_to_packed_integer(self.A.flatten())
         self.dut.B_T.value = utils.array_to_packed_integer(self.B_T.flatten())
@@ -88,6 +89,18 @@ async def test_matrix_multiplication_flex_random(dut):
         m = random.randint(1, 3)
         a = np.random.uniform(-max_val, max_val, size=(l, m))
         b = np.random.uniform(-max_val, max_val, size=(m, 1))
+        test.A = a
+        test.B_T = b.transpose()
+        await test.exec_test()
+
+
+@cocotb.test()
+async def test_matrix_multiplication_flex_big_matrix(dut):
+    test = MatrixMultiplicationFlexTest(dut, np.array([]), np.array([]))
+
+    for i in range(10):
+        a = np.random.uniform(100, 100, size=(128, 728))
+        b = np.random.uniform(100, 100, size=(728, 1))
         test.A = a
         test.B_T = b.transpose()
         await test.exec_test()

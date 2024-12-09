@@ -115,6 +115,10 @@ def pack_ieee754_array(ieee754_array):
 def unpack_ieee754_array(packed_ieee754_array, width):
     """Unpack single value into list of 32-bit values"""
     mask = (1 << 32) - 1
+    return_array = []
+    for i in range(width):
+        print(i)
+        return_array.append((packed_ieee754_array >> (32 * i)) & mask)
     return [(packed_ieee754_array >> (32 * i)) & mask for i in range(width)]
 
 
