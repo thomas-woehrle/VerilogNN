@@ -1,14 +1,14 @@
 `timescale 1ns / 1ns
-`include "E_Function.v"
+`include "ExpFunction.v"
 `include "DisplayFloat.v"
 
-module E_FunctionTB;
+module ExpFunctionTB;
 
   reg  [31:0] X_val;
   wire [31:0] result;
 
 
-  e_function E1 (
+  ExpFunction E1 (
       .x_value(X_val),
       .result (result)
   );
@@ -26,8 +26,8 @@ module E_FunctionTB;
 
   initial begin
 
-    $dumpfile("vcd/E_FunctionTB.vcd");
-    $dumpvars(0, E_FunctionTB);
+    $dumpfile("vcd/ExpFunctionTB.vcd");
+    $dumpvars(0, ExpFunctionTB);
 
     #20;
     X_val = 32'b0_00000000_00000000000000000000000;  //0

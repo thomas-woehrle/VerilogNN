@@ -1,9 +1,9 @@
 `ifndef _hyperbolic_tangent
 `define _hyperbolic_tangent
 
-`include "E_Function.v"
-`include "FloatingDivision.v"
-`include "FloatingAddition.v"
+// `include "ExpFunction.v"
+// `include "FloatingDivision.v"
+// `include "FloatingAddition.v"
 
 // Hyperbolic tangent calculated using exponential function as following:
 // f(x) = (e^num - e^(-num)) / (e^num + e^(-num))
@@ -21,7 +21,7 @@ module HyperbolicTangent (
   wire [31:0] denominator;  // e^num + e^(-num)
   wire [31:0] fraction;
 
-  e_function E1 (
+  ExpFunction E1 (
       .x_value(num),
       .result (E_storage)
   );
@@ -32,7 +32,7 @@ module HyperbolicTangent (
       .result(E_inverse)
   );
 
-  // e_function E2 (.x_value({~num[31],num[30:0]}),
+  // ExpFunction E2 (.x_value({~num[31],num[30:0]}),
   //                .result(E_inverse));
 
   wire [31:0] E_inverse_flipped;

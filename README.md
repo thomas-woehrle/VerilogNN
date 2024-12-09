@@ -6,10 +6,11 @@ This repo is part of a bigger project [NN@FPGA](https://github.com/ruzicka02/NN.
 ## Module description
 
 Various "groups" of modules are contained in the `src/` directory:
+
 - Floating point operations on single numbers (`FloatingCompare.v`, `FloatingAddition.v`, ...)
 - Operations on vectors of floating points (`VectorAddition.v`, ...)
 - Operations on matrices of floating points (`MatrixMultiplication___.v`, ...)
-- Mathematical functions, used as neural network activations (`E_Function.v`, `ReLO.v`, ...)
+- Mathematical functions, used as neural network activations (`ExpFunction.v`, `ReLO.v`, ...)
 - Entire neural network layers
 
 Various of these files, working with larger input data, are contained in multiple variants: `Par`, `Seq` and `Flex`.

@@ -1,3 +1,7 @@
+ExpFunction: # chane name ??
+  - FloatingAddition
+  - FloatingDivision
+  - FloatingMultiplication
 FloatingAddition:
   - FloatingCompare
 FloatingCompare: []
@@ -5,15 +9,52 @@ FloatingDivision:
   - FloatingAddition
   - FloatingMultiplication
 FloatingMultiplication: []
+HyperbolicTangent:
+  - ExpFunction
+  - FloatingAddition
+  - FloatingDivision
+LogarithmApprox:
+  - FloatingAddition
+  - FloatingDivision
+  - FloatingMultiplication
 MatrixMultiplicationFlex:
   - VectorMultiplicationFlex
+MatrixMultiplicationSeq:
+  - VectorMultiplicationSeq
+  - VectorMultiplicationPar
+MnistMinimalNN:
+  - NeuralLayerSeq
+NeuralLayerSeq:
+  - HyperbolicTangent
+  - MatrixMultiplicationSeq
+  - ReLU
+  - Sigmoid
+  - Softmax
+  - Softplus
+  - VectorAddition
+ReLU: []
+Sigmoid:
+  - FloatingAddition
+  - FloatingDivision
+Softmax:
+  - FloatingDivision
+  - VectorSum
+  - ExpFunction
+Softplus:
+  - FloatingCompare
+  - LogarithmApprox
 VectorAddition:
   - FloatingAddition
 VectorAdditionFlex:
   - FloatingAddition
-VectorMultiplicationPar:
-  - FloatingAddition
-  - FloatingMultiplication
 VectorMultiplicationFlex:
   - FloatingAddition
   - FloatingMultiplication
+VectorMultiplicationPar:
+  - FloatingAddition
+  - FloatingMultiplication
+VectorMultiplicationSeq:
+  - FloatingAddition
+  - FloatingMultiplication
+VectorSum:
+  - FloatingAddition

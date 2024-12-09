@@ -3,7 +3,7 @@
 `ifndef _matrix_multiplication_seq
 `define _matrix_multiplication_seq
 
-`include "VectorMultiplicationSeq.v"
+// `include "VectorMultiplicationSeq.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
 // assumed that the matrix is passed in row-major order. Output matrix will have dimensions L * N and will be

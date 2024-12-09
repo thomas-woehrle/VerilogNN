@@ -14,6 +14,8 @@
 // Neural layer performing all computations in parallel. After matrix multiplication, one of the many activation
 // functions is applied - this is determined in compile time.
 //
+// weights should be the weights in row-major order, with each row corresponding to one neuron
+//
 // List of available activation functions (and their respective ACTIVATION values):
 //   0 - ReLU
 //   1 - sigmoid
