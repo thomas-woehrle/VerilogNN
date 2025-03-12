@@ -55,10 +55,8 @@ class VectorBaseTest(BaseTest):
         self.result = None
 
     def assign_input(self):
-        self.dut.A.value = utils.pack_ieee754_array(
-            utils.array_to_ieee754_array(self.A))
-        self.dut.B.value = utils.pack_ieee754_array(
-            utils.array_to_ieee754_array(self.B))
+        self.dut.A.value = utils.array_to_packed_integer(self.A)
+        self.dut.B.value = utils.array_to_packed_integer(self.B)
 
     def assign_output(self, width=3):
         # TODO dynamic width

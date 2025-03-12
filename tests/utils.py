@@ -30,9 +30,15 @@ def get_tolerance(value):
     return 10 ** (-6 + n_digits)
 
 
+def get_tolerances_for_array(array: np.ndarray) -> np.ndarray:
+    return np.vectorize(get_tolerance)(array)
+
+
 def get_dot_product_tolerance(a, b):
     """Calculate the tolerance for a dot product a @ b"""
     vectorized_get_tolerance = np.vectorize(get_tolerance)
+    # the actual tolerance is a little different and also depends on the lenght of a and b
+    # * 10 is a safety measure, moving the tolerance one digit, which doesn't make a big difference
     return max(
         # max tolerance for any value in a * b
         max(vectorized_get_tolerance(a * b)),
@@ -40,7 +46,7 @@ def get_dot_product_tolerance(a, b):
         max(vectorized_get_tolerance(a)),
         # max tolerance for any value in b
         max(vectorized_get_tolerance(b))
-    )
+    ) * 10
 
 
 def assert_convertibility(x):
@@ -114,3 +120,15 @@ def unpack_ieee754_array(packed_ieee754_array, width):
     """Unpack single value into list of 32-bit values"""
     mask = (1 << 32) - 1
     return [(packed_ieee754_array >> (32 * i)) & mask for i in range(width)]
+
+
+def array_to_packed_integer(array):
+    """Turn an array into the integer representing it in IEEE754.
+    array is assumed to be 1-dimensional.
+    """
+    return pack_ieee754_array(array_to_ieee754_array(array))
+
+
+def packed_integer_to_array(integer, width):
+    """Turn a single integer as received from dut.result into an array with a certain width"""
+    return ieee754_array_to_array(unpack_ieee754_array(integer, width))

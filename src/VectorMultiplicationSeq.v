@@ -3,8 +3,8 @@
 `ifndef _vector_multiplication_seq
 `define _vector_multiplication_seq
 
-`include "FloatingMultiplication.v"
-`include "FloatingAddition.v"
+// `include "FloatingMultiplication.v"
+// `include "FloatingAddition.v"
 
 // also known as dot product. Sequentialized into MOD_COUNT multipliers and adders.
 // it is expected that MOD_COUNT <= VLEN (and ideally VLEN % MOD_COUNT == 0).

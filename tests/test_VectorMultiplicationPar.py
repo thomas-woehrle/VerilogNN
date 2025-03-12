@@ -3,19 +3,14 @@ import math
 import cocotb
 import numpy as np
 
+import assertions
 import utils
 import test_types
 
 
 class VectorMultiplicationParTest(test_types.VectorBaseTest):
     def assert_result(self):
-        expected = self.A @ self.B
-        # not sure about this
-        tolerance = utils.get_dot_product_tolerance(self.A, self.B)
-
-        assert abs(self.result - expected) < tolerance, \
-            f"Mismatch: {
-                self.A} @ {self.B} = {self.result} (expected: {expected}; tolerance: {tolerance})"
+        assertions.assert_vector_multiplication(self.A, self.B, self.result)
 
     def assign_output(self):
         self.result = utils.ieee754_to_float(self.dut.result.value)

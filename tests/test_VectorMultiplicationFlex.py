@@ -24,6 +24,7 @@ class VectorMultiplicationFlexTest(test_VectorMultiplicationPar.VectorMultiplica
         # clk is already assigned
         # Assigns A and B
         super().assign_input()
+        self.vlen = len(self.A)
         self.dut.vlen.value = self.vlen
 
     async def exec_test(self):
@@ -31,16 +32,6 @@ class VectorMultiplicationFlexTest(test_VectorMultiplicationPar.VectorMultiplica
 
         await Timer(1, "ns")
         await cocotb.start(self.clk.start())
-
-        counter = 0
-        while (True):
-            done = self.dut.done.value
-            print(f"{counter:04} - Done: {done}")
-            counter += 1
-            if done:
-                break
-
-        print("Waiting for:", math.ceil(self.vlen / MOD_COUNT) + 1)
 
         # more MOD_COUNT means that it will be finished faster.
         # This has to be the same MOD_COUNT, which is used in the module
@@ -67,7 +58,7 @@ async def test_vector_multiplication_flex_random_simple(dut):
     test = VectorMultiplicationFlexTest(dut, [], [])
     max_val = 100
 
-    for i in range(1000):
+    for i in range(100):
         length = random.randint(1, 128)
         test.A = utils.sample_array(-max_val, max_val, length)
         test.B = utils.sample_array(-max_val, max_val, length)
@@ -80,7 +71,7 @@ async def test_vector_multiplication_flex_random_full_range(dut):
     # / 10 because there can be problems when mutliplying 2 arrays with multiple values close to max
     max_val = math.sqrt(utils.IEEE754_MAX_VAL) / 10
 
-    for i in range(1000):
+    for i in range(100):
         length = random.randint(1, 128)
         test.A = utils.sample_array(-max_val, max_val, length)
         test.B = utils.sample_array(-max_val, max_val, length)

@@ -1,9 +1,9 @@
 `ifndef _softmax
 `define _softmax
 
-`include "E_Function.v"
-`include "VectorSum.v"
-`include "FloatingDivision.v"
+// `include "ExpFunction.v"
+// `include "VectorSum.v"
+// `include "FloatingDivision.v"
 
 module Softmax #(
     parameter VLEN = 4
@@ -20,7 +20,7 @@ module Softmax #(
   genvar i;
   generate
     for (i = 0; i < VLEN; i = i + 1) begin
-      e_function E1 (
+      ExpFunction E1 (
           .x_value(in[32*i+:32]),
           .result (E_storage[32*i+:32])
       );

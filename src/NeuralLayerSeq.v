@@ -3,13 +3,13 @@
 `ifndef _neural_layer_seq
 `define _neural_layer_seq
 
-`include "MatrixMultiplicationSeq.v"
-`include "VectorAddition.v"
-`include "ReLU.v"
-`include "Sigmoid.v"
-`include "Softmax.v"
-`include "HyperbolicTangent.v"
-`include "Softplus.v"
+// `include "MatrixMultiplicationSeq.v"
+// `include "VectorAddition.v"
+// `include "ReLU.v"
+// `include "Sigmoid.v"
+// `include "Softmax.v"
+// `include "HyperbolicTangent.v"
+// `include "Softplus.v"
 
 // Neural layer performing more sequential computations. Number of computing modules can be directly set by
 // MOD_COUNT parameter, which is passed to the MatrixMultiplication module. Afterwards, one of the many activation

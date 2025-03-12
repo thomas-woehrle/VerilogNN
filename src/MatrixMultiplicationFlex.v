@@ -3,7 +3,7 @@
 `ifndef _matrix_multiplication_flex
 `define _matrix_multiplication_flex
 
-`include "VectorMultiplicationFlex.v"
+// `include "VectorMultiplicationFlex.v"
 
 // Multiplies two matrices of dimensions L * M and M * N. As input can be only a vector, it is automatically
 // assumed that the matrix is passed in row-major order. Output matrix will have dimensions L * N and will be
@@ -65,6 +65,11 @@ module MatrixMultiplicationFlex #(
     l_copy <= l;
     m_copy <= m;
     n_copy <= n;
+  end
+
+  // done signal should be changed right away
+  always @(A, B_T, l, m, n) begin
+    done = 1'b0;
   end
 
   // once output is complete, change the inputs for vector_mult

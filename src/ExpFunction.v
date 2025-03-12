@@ -1,14 +1,14 @@
 
-`ifndef _e_function
-`define _e_function
+`ifndef _ExpFunction
+`define _ExpFunction
 
-`include "FloatingAddition.v"
-`include "FloatingMultiplication.v"
-`include "FloatingDivision.v"
+// `include "FloatingAddition.v"
+// `include "FloatingMultiplication.v"
+// `include "FloatingDivision.v"
 
 // approximates exponential function using 5th degree Taylor polynomial. For negative inputs,
 // calculates e^(-x) instead (to avoid negative polynomial values) and outputs inverse of it.
-module e_function (
+module ExpFunction (
     x_value,
     result
 );
@@ -115,4 +115,4 @@ module e_function (
   end
 
 endmodule
-`endif  // _e_function
+`endif  // _ExpFunction
